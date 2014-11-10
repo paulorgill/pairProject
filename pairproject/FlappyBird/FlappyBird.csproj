@@ -42,6 +42,7 @@
     <Compile Include="Bird.cs" />
     <Compile Include="Obstacle.cs" />
     <Compile Include="Background.cs" />
+    <Compile Include="testClass.cs" />
   </ItemGroup>
   <ItemGroup>
     <PsmMetadata Include="app.xml" />
