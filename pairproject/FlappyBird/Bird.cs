@@ -13,9 +13,12 @@ namespace FlappyBird
 		//Private variables.
 		private static SpriteUV 	sprite;
 		private static TextureInfo	textureInfo;
-		private static int			pushAmount = 100;
-		private static float		yPositionBeforePush;
-		private static bool			rise;
+		private static TextureInfo	textureInfo1;
+		
+		private static bool			up;
+		private static bool			down;
+		private static bool			left;
+		private static bool			right;
 		private static float		angle;
 		private static bool			alive;
 		
@@ -27,7 +30,8 @@ namespace FlappyBird
 		//Public functions.
 		public Bird (Scene scene)
 		{
-			textureInfo  = new TextureInfo("/Application/textures/bird.png");
+			textureInfo  = new TextureInfo("/Application/textures/playertest.png");
+			textureInfo1  = new TextureInfo("/Application/textures/bird.png");
 			
 			sprite	 		= new SpriteUV();
 			sprite 			= new SpriteUV(textureInfo);	
@@ -35,7 +39,7 @@ namespace FlappyBird
 			sprite.Position = new Vector2(50.0f,Director.Instance.GL.Context.GetViewport().Height*0.5f);
 			//sprite.Pivot 	= new Vector2(0.5f,0.5f);
 			angle = 0.0f;
-			rise  = false;
+			up  = false;
 			alive = true;
 			
 			//Add to the current scene.
@@ -50,27 +54,78 @@ namespace FlappyBird
 		public void Update(float deltaTime)
 		{			
 			//adjust the push
-			if(rise)
+			if(up)
 			{
 				//sprite.Rotate(0.008f);
-				if( (sprite.Position.Y-yPositionBeforePush) < pushAmount)
-					sprite.Position = new Vector2(sprite.Position.X + 3f, sprite.Position.Y + 3f);
-				else
-					rise = false;
+				//if( (sprite.Position.Y-yPositionBeforePush) < pushAmount)
+				
+				
+					sprite.Position = new Vector2(sprite.Position.X ,sprite.Position.Y + 3f);
+				//else
+					up = false;
 			}
-			else
+			
+			if(down)
 			{
-				//sprite.Rotate(-0.005f);
-				//sprite.Position = new Vector2(sprite.Position.X, sprite.Position.Y - 3);
+				//sprite.Rotate(0.008f);
+				//if( (sprite.Position.Y-yPositionBeforePush) < pushAmount)
+					sprite.Position = new Vector2(sprite.Position.X ,sprite.Position.Y - 3f);
+				//else
+					down = false;
 			}
+			
+			if(left)
+			{
+				//sprite.Rotate(0.008f);
+				//if( (sprite.Position.Y-yPositionBeforePush) < pushAmount)
+					sprite.Position = new Vector2(sprite.Position.X -3 ,sprite.Position.Y);
+				//else
+					left = false;
+			}
+			
+			if(right)
+			{
+				sprite.Position = new Vector2 (sprite.Position.X + 3, sprite.Position.Y );
+				right = false; 
+			}
+			
+			
+		
 		}	
 		
-		public void Tapped()
+		public void TappedUp()
 		{
-			if(!rise)
+			if(!up)
 			{
-				rise = true;
-				yPositionBeforePush = sprite.Position.Y;
+				up = true;
+				//yPositionBeforePush = sprite.Position.Y;
+			}
+		}
+		
+		public void TappedDown()
+		{
+			if(!down)
+			{
+				down = true;
+				//yPositionBeforePush = sprite.Position.Y;
+			}
+		}
+		
+		public void Tappedleft()
+		{
+			if(!left)
+			{
+				left= true;
+				//yPositionBeforePush = sprite.Position.Y;
+			}
+		}
+		
+		public void TappedRight()
+		{
+			if(!right)
+			{
+				right = true;
+				//yPositionBeforePush = sprite.Position.Y;
 			}
 		}
 	}

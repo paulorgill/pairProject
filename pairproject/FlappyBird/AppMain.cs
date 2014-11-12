@@ -99,13 +99,31 @@ namespace FlappyBird
 			if (Input2.GamePad0.Up.Down)
 			{
 			
-				bird.Tapped();
+				bird.TappedUp();
+			}
+			
+			if (Input2.GamePad0.Down.Down)
+			{
+			
+				bird.TappedDown();
+			}
+			
+			if (Input2.GamePad0.Left.Down)
+			{
+			
+				bird.Tappedleft();
+			}
+			
+			if (Input2.GamePad0.Right.Down)
+			{
+			
+				bird.TappedRight();
 			}
 			
 			if (Input2.GamePad0.Cross.Press)
 			{
 			
-				bird.Tapped();
+				bird.TappedUp();
 			}
 			
 			//Update the bird.

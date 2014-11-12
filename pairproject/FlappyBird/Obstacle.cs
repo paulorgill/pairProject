@@ -35,13 +35,13 @@ namespace FlappyBird
 			sprites[0]			= new SpriteUV(textureInfoTop);	
 			sprites[0].Quad.S 	= textureInfoTop.TextureSizef;
 			//Add to the current scene.
-			scene.AddChild(sprites[0]);
+			//scene.AddChild(sprites[0]);
 			
 			//Bottom
 			sprites[1]			= new SpriteUV(textureInfoBottom);	
 			sprites[1].Quad.S 	= textureInfoBottom.TextureSizef;		
 			//Add to the current scene.
-			scene.AddChild(sprites[1]);
+			//scene.AddChild(sprites[1]);
 			
 			//Get sprite bounds.
 			Bounds2 b = sprites[0].Quad.Bounds2();

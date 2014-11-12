@@ -109,3 +109,7 @@ C:\Users\paul\Desktop\Uni Year 2\Games Production\GitHub\pairproject\FlappyBird\
 C:\Users\paul\Desktop\Uni Year 2\Games Production\GitHub\pairproject\FlappyBird\obj\Debug\convertedpdb\app.exe.mdb
 C:\Users\paul\Desktop\Uni Year 2\Games Production\GitHub\pairproject\FlappyBird\obj\Debug\app.exe
 C:\Users\paul\Desktop\Uni Year 2\Games Production\GitHub\pairproject\FlappyBird\obj\Debug\app.pdb
+C:\Users\paul\Desktop\Uni Year 2\Games Production\GitHub\pairproject\FlappyBird\bin\Debug\FlappyBird-unsigned\Application\textures\floor.png
+C:\Users\paul\Desktop\Uni Year 2\Games Production\GitHub\pairproject\FlappyBird\bin\Debug\FlappyBird-signed\Application\textures\floor.png
+C:\Users\paul\Desktop\Uni Year 2\Games Production\GitHub\pairproject\FlappyBird\bin\Debug\FlappyBird-unsigned\Application\textures\playertest.png
+C:\Users\paul\Desktop\Uni Year 2\Games Production\GitHub\pairproject\FlappyBird\bin\Debug\FlappyBird-signed\Application\textures\playertest.png
