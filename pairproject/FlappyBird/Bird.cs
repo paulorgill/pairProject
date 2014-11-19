@@ -46,6 +46,18 @@ namespace FlappyBird
 			scene.AddChild(sprite);
 		}
 		
+		public float GetX()
+		{
+			float birdx = sprite.Position.X;
+			return birdx ;
+		}
+		
+		public float GetY()
+		{
+			
+			return sprite.Position.Y;
+		}
+		
 		public void Dispose()
 		{
 			textureInfo.Dispose();

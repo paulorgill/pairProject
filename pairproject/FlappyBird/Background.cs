@@ -47,6 +47,7 @@ namespace FlappyBird
 				scene.AddChild(sprite);
 		}	
 		
+		
 		public void Dispose()
 		{
 			textureInfo.Dispose();

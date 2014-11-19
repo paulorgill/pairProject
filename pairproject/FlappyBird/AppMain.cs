@@ -18,9 +18,10 @@ namespace FlappyBird
 		private static Sce.PlayStation.HighLevel.UI.Scene 				uiScene;
 		private static Sce.PlayStation.HighLevel.UI.Label				scoreLabel;
 		
-		private static Obstacle[]	obstacles;
+		private static Bullet		bullet;
 		private static Bird			bird;
 		private static Background	background;
+		
 				
 		public static void Main (string[] args)
 		{
@@ -42,8 +43,8 @@ namespace FlappyBird
 			
 			//Clean up after ourselves.
 			bird.Dispose();
-			foreach(Obstacle obstacle in obstacles)
-				obstacle.Dispose();
+			//foreach(Obstacle obstacle in obstacles)
+				//obstacle.Dispose();
 			background.Dispose();
 			
 			Director.Terminate ();
@@ -81,10 +82,9 @@ namespace FlappyBird
 			//Create the flappy douche
 			bird = new Bird(gameScene);
 			
-			//Create some obstacles.
-			obstacles = new Obstacle[2];
-			obstacles[0] = new Obstacle(Director.Instance.GL.Context.GetViewport().Width*0.5f, gameScene);	
-			obstacles[1] = new Obstacle(Director.Instance.GL.Context.GetViewport().Width, gameScene);
+			
+			bullet = new Bullet( 50.0f, gameScene);	
+			
 			
 			//Run the scene.
 			Director.Instance.RunWithScene(gameScene, true);
@@ -95,36 +95,47 @@ namespace FlappyBird
 			//Determine whether the player tapped the screen
 			var touches = Touch.GetData(0);
 			GamePadData data = GamePad.GetData(0);
-			//If tapped, inform the bird.
+			
+			
+			//Move the player
 			if (Input2.GamePad0.Up.Down)
 			{
 			
 				bird.TappedUp();
 			}
 			
-			if (Input2.GamePad0.Down.Down)
+			else if (Input2.GamePad0.Down.Down)
 			{
 			
 				bird.TappedDown();
 			}
 			
-			if (Input2.GamePad0.Left.Down)
+			else if (Input2.GamePad0.Left.Down)
 			{
 			
 				bird.Tappedleft();
 			}
 			
-			if (Input2.GamePad0.Right.Down)
+			else if (Input2.GamePad0.Right.Down)
 			{
 			
 				bird.TappedRight();
 			}
 			
-			if (Input2.GamePad0.Cross.Press)
+			if (Input2.GamePad0.Cross.Down)
 			{
-			
-				bird.TappedUp();
+				//bullet.Spawn(bird.Get().position, bird.Get().rotation.Y);
+				//bird.TappedUp();
+				//scene.AddChild(bullet);
+				//gameScene.AddChild(bullet);
+				//bullet = new Bullet(gameScene);
+				//bird.TappedRight();
+				//bullet.SpawnBullet();
+				//scene.AddChild(new Bulle(new Vector3(bird.
 			}
+			
+			
+			
 			
 			//Update the bird.
 			bird.Update(0.0f);
@@ -135,8 +146,8 @@ namespace FlappyBird
 				background.Update(0.0f);
 							
 				//Update the obstacles.
-				foreach(Obstacle obstacle in obstacles)
-					obstacle.Update(0.0f);
+				bullet.Update(0.0f);
+			
 			}
 		}
 		

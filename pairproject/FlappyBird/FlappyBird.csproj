@@ -40,10 +40,9 @@
   <ItemGroup>
     <Compile Include="AppMain.cs" />
     <Compile Include="Bird.cs" />
-    <Compile Include="Obstacle.cs" />
     <Compile Include="Background.cs" />
     <Compile Include="testClass.cs" />
-    <Compile Include="MyClass.cs" />
+    <Compile Include="Bullet.cs" />
   </ItemGroup>
   <ItemGroup>
     <PsmMetadata Include="app.xml" />
