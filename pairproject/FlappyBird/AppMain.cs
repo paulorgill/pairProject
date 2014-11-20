@@ -18,9 +18,11 @@ namespace FlappyBird
 		private static Sce.PlayStation.HighLevel.UI.Scene 				uiScene;
 		private static Sce.PlayStation.HighLevel.UI.Label				scoreLabel;
 		
-		private static Obstacle[]	obstacles;
-		private static Bird			bird;
+		private static Bullet		bullet;
+		private static Player			player;
 		private static Background	background;
+		private static bool				North, South, East, West;
+		
 				
 		public static void Main (string[] args)
 		{
@@ -41,9 +43,9 @@ namespace FlappyBird
 			}
 			
 			//Clean up after ourselves.
-			bird.Dispose();
-			foreach(Obstacle obstacle in obstacles)
-				obstacle.Dispose();
+			player.Dispose();
+			//foreach(Obstacle obstacle in obstacles)
+				//obstacle.Dispose();
 			background.Dispose();
 			
 			Director.Terminate ();
@@ -79,12 +81,11 @@ namespace FlappyBird
 			background = new Background(gameScene);
 			
 			//Create the flappy douche
-			bird = new Bird(gameScene);
+			player = new Player(gameScene);
 			
-			//Create some obstacles.
-			obstacles = new Obstacle[2];
-			obstacles[0] = new Obstacle(Director.Instance.GL.Context.GetViewport().Width*0.5f, gameScene);	
-			obstacles[1] = new Obstacle(Director.Instance.GL.Context.GetViewport().Width, gameScene);
+			
+			//bullet = new Bullet( 50.0f, gameScene);	
+			
 			
 			//Run the scene.
 			Director.Instance.RunWithScene(gameScene, true);
@@ -95,48 +96,49 @@ namespace FlappyBird
 			//Determine whether the player tapped the screen
 			var touches = Touch.GetData(0);
 			GamePadData data = GamePad.GetData(0);
-			//If tapped, inform the bird.
+			
+			
+			//Move the player
 			if (Input2.GamePad0.Up.Down)
-			{
-			
-				bird.TappedUp();
-			}
-			
-			if (Input2.GamePad0.Down.Down)
-			{
-			
-				bird.TappedDown();
-			}
+				North = true;
+			else
+				North = false;
 			
 			if (Input2.GamePad0.Left.Down)
-			{
-			
-				bird.Tappedleft();
-			}
+				West = true;
+			else
+				West = false;
 			
 			if (Input2.GamePad0.Right.Down)
-			{
+				East = true;
+			else
+				East = false;
 			
-				bird.TappedRight();
-			}
+			if (Input2.GamePad0.Down.Down)
+				South = true;
+			else
+				South = false;
+				
+			player.Update(North, East, South, West);
 			
-			if (Input2.GamePad0.Cross.Press)
-			{
 			
-				bird.TappedUp();
-			}
+//			Vector2 direction = targetPosition - currentPosition;
+//			direction.Normalize();
+//			float rotationInRadians = (float)Math.Atan2((double)direction.Y, (double)direction.X) + MathHelper.PiOver2;
+			
+			gameScene.Camera2D.SetViewY(new Vector2(0.0f,Director.Instance.GL.Context.GetViewport().Height*0.5f), player.GetPos());
 			
 			//Update the bird.
-			bird.Update(0.0f);
+			//player.Update(0.0f);
 			
-			if(bird.Alive)
+			if(player.Alive)
 			{
 				//Move the background.
 				background.Update(0.0f);
 							
 				//Update the obstacles.
-				foreach(Obstacle obstacle in obstacles)
-					obstacle.Update(0.0f);
+				//bullet.Update(0.0f);
+			
 			}
 		}
 		

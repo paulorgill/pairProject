@@ -23,7 +23,7 @@ namespace FlappyBird
 			textureInfo  		= new TextureInfo("/Application/textures/floor.png");
 			//Left
 			sprites[0] 			= new SpriteUV(textureInfo);
-			sprites[0].Quad.S 	= textureInfo.TextureSizef;
+			sprites[0].Quad.S 	= textureInfo.TextureSizef/0.3f;
 			//Middle
 			//sprites[1] 			= new SpriteUV(textureInfo);
 			//sprites[1].Quad.S 	= textureInfo.TextureSizef;
@@ -36,7 +36,7 @@ namespace FlappyBird
 			width     = b.Point10.X;
 			
 			//Position pipes.
-			sprites[0].Position = new Vector2(100.0f, 0.0f);
+			sprites[0].Position = new Vector2(-200.0f, -100.0f);
 			
 			//sprites[1].Position = new Vector2(sprites[0].Position.X+width, 0.0f);
 			
@@ -46,6 +46,7 @@ namespace FlappyBird
 			foreach(SpriteUV sprite in sprites)
 				scene.AddChild(sprite);
 		}	
+		
 		
 		public void Dispose()
 		{
