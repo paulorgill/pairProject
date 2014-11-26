@@ -11,19 +11,19 @@ namespace FlappyBird
 	public class Background
 	{	
 		//Private variables.
-		private SpriteUV[] 	sprites;
+		private SpriteUV 	sprites;
 		private TextureInfo	textureInfo;
 		private float		width;
 		
 		//Public functions.
 		public Background (Scene scene)
 		{
-			sprites	= new SpriteUV[1];
+			sprites	= new SpriteUV();
 			
 			textureInfo  		= new TextureInfo("/Application/textures/floor.png");
 			//Left
-			sprites[0] 			= new SpriteUV(textureInfo);
-			sprites[0].Quad.S 	= textureInfo.TextureSizef/0.3f;
+			sprites 			= new SpriteUV(textureInfo);
+			sprites.Quad.S 	= textureInfo.TextureSizef/0.3f;
 			//Middle
 			//sprites[1] 			= new SpriteUV(textureInfo);
 			//sprites[1].Quad.S 	= textureInfo.TextureSizef;
@@ -32,19 +32,18 @@ namespace FlappyBird
 			//sprites[2].Quad.S 	= textureInfo.TextureSizef;
 			
 			//Get sprite bounds.
-			Bounds2 b = sprites[0].Quad.Bounds2();
+			Bounds2 b = sprites.Quad.Bounds2();
 			width     = b.Point10.X;
 			
 			//Position pipes.
-			sprites[0].Position = new Vector2(-200.0f, -100.0f);
+			sprites.Position = new Vector2(-200.0f, -100.0f);
 			
 			//sprites[1].Position = new Vector2(sprites[0].Position.X+width, 0.0f);
 			
 			//sprites[2].Position = new Vector2(sprites[1].Position.X+width, 0.0f);
 			
 			//Add to the current scene.
-			foreach(SpriteUV sprite in sprites)
-				scene.AddChild(sprite);
+			scene.AddChild(sprites);
 		}	
 		
 		

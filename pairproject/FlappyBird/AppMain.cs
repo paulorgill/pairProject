@@ -18,24 +18,20 @@ namespace FlappyBird
 		private static Sce.PlayStation.HighLevel.UI.Scene 				uiScene;
 		private static Sce.PlayStation.HighLevel.UI.Label				scoreLabel;
 		
-		private static bool quitGame = false;
 		private static Bullet		bullet;
-		private static Player		player;
+		private static Player			player;
 		private static Background	background;
-		private static Enemy		enemy;
-		private static bool			North, South, East, West;
-<<<<<<< HEAD
+		private static bool				North, South, East, West;
 		private static bool			firing = false;
-=======
->>>>>>> origin/master
 		
-				
+		//List<Bullet> bullets = new List<Bullet>();
+						
 		public static void Main (string[] args)
 		{
 			Initialize();
 			
 			//Game loop
-			//bool quitGame = false;
+			bool quitGame = false;
 			while (!quitGame) 
 			{
 				Update ();
@@ -53,14 +49,7 @@ namespace FlappyBird
 			//foreach(Obstacle obstacle in obstacles)
 				//obstacle.Dispose();
 			background.Dispose();
-			
-			enemy.Dispose();
-			
-<<<<<<< HEAD
 			bullet.Dispose();
-			
-=======
->>>>>>> origin/master
 			Director.Terminate ();
 		}
 
@@ -93,17 +82,14 @@ namespace FlappyBird
 			//Create the background.
 			background = new Background(gameScene);
 			
-			//Create the player
+			//Create the flappy douche
 			player = new Player(gameScene);
-			
-			//Create the enemy
-			enemy = new Enemy( player, gameScene);
-<<<<<<< HEAD
 			
 			//Create the bullet
 			bullet = new Bullet(gameScene);
-=======
->>>>>>> origin/master
+			
+			//Create bullets
+			//bullet = new Bullet( 50.0f, gameScene);	
 			
 			//Run the scene.
 			Director.Instance.RunWithScene(gameScene, true);
@@ -114,8 +100,7 @@ namespace FlappyBird
 			//Determine whether the player tapped the screen
 			var touches = Touch.GetData(0);
 			GamePadData data = GamePad.GetData(0);
-			
-			
+						
 			//Move the player
 			if (Input2.GamePad0.Up.Down)
 				North = true;
@@ -128,7 +113,8 @@ namespace FlappyBird
 				West = false;
 			
 			if (Input2.GamePad0.Right.Down)
-				East = true;
+			{East = true;
+				firing = true;}
 			else
 				East = false;
 			
@@ -141,15 +127,9 @@ namespace FlappyBird
 				bullet.ResetBullet(player.GetX(), player.GetY());
 				firing = true;
 			}
+			
 				
 			player.Update(North, East, South, West);
-			
-<<<<<<< HEAD
-			enemy.Update();
-=======
-			enemy.Update(player);
-			
->>>>>>> origin/master
 			
 			if (firing)
 			{
@@ -161,30 +141,53 @@ namespace FlappyBird
 				else
 				bullet.Update();
 			}
-//			Vector2 direction = targetPosition - currentPosition;
+			
+			//			Vector2 direction = targetPosition - currentPosition;
 //			direction.Normalize();
 //			float rotationInRadians = (float)Math.Atan2((double)direction.Y, (double)direction.X) + MathHelper.PiOver2;
 			
 			gameScene.Camera2D.SetViewY(new Vector2(0.0f,Director.Instance.GL.Context.GetViewport().Height*0.5f), player.GetPos());
 			
-			
-			
 			if(player.Alive)
 			{
-				//Move the background.
-				background.Update(0.0f);
-							
-				//Update the obstacles.
-				//bullet.Update(0.0f);
-				
-				
-			if (enemy.HasCollidedWith (player.Sprite) == true)
-				{
-					//quitGame = true; 
-				}
-			
+				background.Update(0.0f);			
 			}
+			
+			
+			
 		}
+				
+//		public void UpdateBullets()
+//		{
+//			foreach(Bullet bullet in bullets)
+//			{
+//				bullet.position += bullet.velocity;
+//				if(Vector2.Distance(bullet.position, player.GetPos()) > 500)
+//				{
+//					bullet.isVisible = false;
+//				}
+//			}
+//			for(int i = 0; i < bullets.Count; i++)
+//			{
+//				bullets.RemoveAt(i);
+//				i--;
+//			}
+//		}
+//		
+		
+		
+//		public static void Shoot()
+//		{
+//			
+//			for(int i = 0; i < 200; i++)
+//			{
+//				bullet.Update(player.GetX()+i, player.GetY());
+//			}
+//			
+//			//float distance = sqrt(pow(mouse.x-spaceShip->_x,2)+pow(mouse.y-spaceShip->_y,2)+pow((mouse.z)-spaceShip->_y,2));
+//			//newBullet.velocity = 
+//			
+//		}
 		
 	}
 }

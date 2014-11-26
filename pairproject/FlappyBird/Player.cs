@@ -17,7 +17,7 @@ namespace FlappyBird
 		
 		private static bool			alive;
 		private static float 		speed = 3.0f;
-		private float 				angle = 0.0f;
+		public float 				angle = 0.0f;
 		
 		public bool Alive { get{return alive;} set{alive = value;} }
 		
@@ -28,13 +28,12 @@ namespace FlappyBird
 		public Player (Scene scene)
 		{
 			textureInfo  = new TextureInfo("/Application/textures/playertest2.png");
-			textureInfo1  = new TextureInfo("/Application/textures/bird.png");
-			
+					
 			sprite	 		= new SpriteUV();
 			sprite 			= new SpriteUV(textureInfo);	
 			sprite.Quad.S 	= textureInfo.TextureSizef;
-			sprite.Position = new Vector2(0.0f,0.0f);
-			//sprite.Pivot 	= new Vector2(0.5f,0.5f);
+			sprite.Position = new Vector2(100.0f,100.0f);
+			sprite.Pivot 	= new Vector2(0.5f,0.5f);
 			alive = true;
 			
 			//Add to the current scene.
@@ -130,15 +129,6 @@ namespace FlappyBird
 			return sprite.Position;
 		}
 		
-		public SpriteUV Sprite
-		{
-			get
-			{
-				return sprite;
-			}
-		}
-		
-<<<<<<< HEAD
 		public float GetX()
 		{
 			return sprite.Position.X;
@@ -148,8 +138,9 @@ namespace FlappyBird
 		{
 			return sprite.Position.Y;
 		}
-=======
->>>>>>> origin/master
+		
+		
+		
 //		public void TappedUp()
 //		{
 //			if(!up)
