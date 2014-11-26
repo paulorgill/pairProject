@@ -33,7 +33,7 @@ namespace FlappyBird
 			sprite	 		= new SpriteUV();
 			sprite 			= new SpriteUV(textureInfo);	
 			sprite.Quad.S 	= textureInfo.TextureSizef;
-			sprite.Position = new Vector2(100.0f,100.0f);
+			sprite.Position = new Vector2(0.0f,0.0f);
 			//sprite.Pivot 	= new Vector2(0.5f,0.5f);
 			alive = true;
 			
@@ -128,6 +128,14 @@ namespace FlappyBird
 		public Vector2 GetPos()
 		{
 			return sprite.Position;
+		}
+		
+		public SpriteUV Sprite
+		{
+			get
+			{
+				return sprite;
+			}
 		}
 		
 //		public void TappedUp()

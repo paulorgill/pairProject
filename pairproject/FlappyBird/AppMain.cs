@@ -18,10 +18,12 @@ namespace FlappyBird
 		private static Sce.PlayStation.HighLevel.UI.Scene 				uiScene;
 		private static Sce.PlayStation.HighLevel.UI.Label				scoreLabel;
 		
+		private static bool quitGame = false;
 		private static Bullet		bullet;
-		private static Player			player;
+		private static Player		player;
 		private static Background	background;
-		private static bool				North, South, East, West;
+		private static Enemy		enemy;
+		private static bool			North, South, East, West;
 		
 				
 		public static void Main (string[] args)
@@ -29,7 +31,7 @@ namespace FlappyBird
 			Initialize();
 			
 			//Game loop
-			bool quitGame = false;
+			//bool quitGame = false;
 			while (!quitGame) 
 			{
 				Update ();
@@ -47,6 +49,8 @@ namespace FlappyBird
 			//foreach(Obstacle obstacle in obstacles)
 				//obstacle.Dispose();
 			background.Dispose();
+			
+			enemy.Dispose();
 			
 			Director.Terminate ();
 		}
@@ -80,12 +84,11 @@ namespace FlappyBird
 			//Create the background.
 			background = new Background(gameScene);
 			
-			//Create the flappy douche
+			//Create the player
 			player = new Player(gameScene);
 			
-			
-			//bullet = new Bullet( 50.0f, gameScene);	
-			
+			//Create the enemy
+			enemy = new Enemy( player, gameScene);
 			
 			//Run the scene.
 			Director.Instance.RunWithScene(gameScene, true);
@@ -121,6 +124,8 @@ namespace FlappyBird
 				
 			player.Update(North, East, South, West);
 			
+			enemy.Update();
+			
 			
 //			Vector2 direction = targetPosition - currentPosition;
 //			direction.Normalize();
@@ -128,8 +133,7 @@ namespace FlappyBird
 			
 			gameScene.Camera2D.SetViewY(new Vector2(0.0f,Director.Instance.GL.Context.GetViewport().Height*0.5f), player.GetPos());
 			
-			//Update the bird.
-			//player.Update(0.0f);
+			
 			
 			if(player.Alive)
 			{
@@ -138,6 +142,12 @@ namespace FlappyBird
 							
 				//Update the obstacles.
 				//bullet.Update(0.0f);
+				
+				
+			if (enemy.HasCollidedWith (player.Sprite) == true)
+				{
+					//quitGame = true; 
+				}
 			
 			}
 		}

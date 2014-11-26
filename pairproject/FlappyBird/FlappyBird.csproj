@@ -40,9 +40,9 @@
   <ItemGroup>
     <Compile Include="AppMain.cs" />
     <Compile Include="Background.cs" />
-    <Compile Include="testClass.cs" />
     <Compile Include="Bullet.cs" />
     <Compile Include="Player.cs" />
+    <Compile Include="Enemy.cs" />
   </ItemGroup>
   <ItemGroup>
     <PsmMetadata Include="app.xml" />
@@ -64,5 +64,9 @@
     <Content Include="textures\background.png" />
     <Content Include="textures\floor.png" />
     <Content Include="textures\playertest.png" />
+    <Content Include="textures\zombie.png" />
+    <Content Include="textures\zombiedown.png" />
+    <Content Include="textures\zombieleft.png" />
+    <Content Include="textures\zombieright.png" />
   </ItemGroup>
 </Project>
