@@ -17,7 +17,7 @@ namespace FlappyBird
 		private static TextureInfo	textureInfoRight;
 		private static TextureInfo	textureInfoLeft;
 		private static bool			enemyAlive;
-		private static float 		enemySpeed = 3.0f;
+		private static float 		enemySpeed = 0.5f;
 		private float width;
 		private float height;
 		
@@ -36,7 +36,7 @@ namespace FlappyBird
 			
 			// set enemy position
 			sprite.Position = new Vector2 (50.0f,200.0f);
-			
+
 			//Add to the current scene.
 			scene.AddChild(sprite);
 			
@@ -53,15 +53,31 @@ namespace FlappyBird
 		}
 	
 		
-		public void Update()
+		public void Update(Player player )	
 		{
-			sprite.Position = new Vector2(sprite.Position.X - enemySpeed, sprite.Position.Y );
+			//player.Sprite.Position.X
+			//sprite.Position = new Vector2(sprite.Position.X - enemySpeed, sprite.Position.Y );
 			
-			if (sprite.Position.X < -width)
+			if (player.Sprite.Position.X > sprite.Position.X)
 			{
-				sprite.Position = new Vector2(Director.Instance.GL.Context.GetViewport().Width,
-			                              Director.Instance.GL.Context.GetViewport().Height);
+				sprite.Position = new Vector2(sprite.Position.X + enemySpeed,sprite.Position.Y);
 			
+			}
+			
+			else if (player.Sprite.Position.X < sprite.Position.X)
+			{
+				sprite.Position = new Vector2(sprite.Position.X - enemySpeed,sprite.Position.Y);
+			}
+			
+			if (player.Sprite.Position.Y > sprite.Position.Y)
+			{
+				sprite.Position = new Vector2(sprite.Position.X,sprite.Position.Y + enemySpeed);
+			
+			}
+			
+			else if (player.Sprite.Position.Y < sprite.Position.Y)
+			{
+				sprite.Position = new Vector2(sprite.Position.X ,sprite.Position.Y - enemySpeed);
 			}
 			
 		}

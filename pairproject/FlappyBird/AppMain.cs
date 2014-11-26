@@ -124,7 +124,7 @@ namespace FlappyBird
 				
 			player.Update(North, East, South, West);
 			
-			enemy.Update();
+			enemy.Update(player);
 			
 			
 //			Vector2 direction = targetPosition - currentPosition;
