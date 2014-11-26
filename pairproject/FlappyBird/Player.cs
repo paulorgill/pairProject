@@ -27,13 +27,13 @@ namespace FlappyBird
 		//Public functions.
 		public Player (Scene scene)
 		{
-			textureInfo  = new TextureInfo("/Application/textures/playertest.png");
+			textureInfo  = new TextureInfo("/Application/textures/playertest2.png");
 			textureInfo1  = new TextureInfo("/Application/textures/bird.png");
 			
 			sprite	 		= new SpriteUV();
 			sprite 			= new SpriteUV(textureInfo);	
 			sprite.Quad.S 	= textureInfo.TextureSizef;
-			sprite.Position = new Vector2(100.0f,100.0f);
+			sprite.Position = new Vector2(0.0f,0.0f);
 			//sprite.Pivot 	= new Vector2(0.5f,0.5f);
 			alive = true;
 			
@@ -130,6 +130,23 @@ namespace FlappyBird
 			return sprite.Position;
 		}
 		
+		public SpriteUV Sprite
+		{
+			get
+			{
+				return sprite;
+			}
+		}
+		
+		public float GetX()
+		{
+			return sprite.Position.X;
+		}
+		
+		public float GetY()
+		{
+			return sprite.Position.Y;
+		}
 //		public void TappedUp()
 //		{
 //			if(!up)

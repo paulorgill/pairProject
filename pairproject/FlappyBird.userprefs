@@ -2,9 +2,9 @@
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.Workbench ActiveDocument="FlappyBird\AppMain.cs">
     <Files>
-      <File FileName="FlappyBird\AppMain.cs" Line="14" Column="2" />
-      <File FileName="FlappyBird\Background.cs" Line="39" Column="51" />
-      <File FileName="FlappyBird\Player.cs" Line="125" Column="5" />
+      <File FileName="FlappyBird\AppMain.cs" Line="138" Column="6" />
+      <File FileName="FlappyBird\Player.cs" Line="137" Column="19" />
+      <File FileName="FlappyBird\Bullet.cs" Line="54" Column="6" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
