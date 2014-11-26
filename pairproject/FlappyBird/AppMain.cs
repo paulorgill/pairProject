@@ -24,7 +24,10 @@ namespace FlappyBird
 		private static Background	background;
 		private static Enemy		enemy;
 		private static bool			North, South, East, West;
+<<<<<<< HEAD
 		private static bool			firing = false;
+=======
+>>>>>>> origin/master
 		
 				
 		public static void Main (string[] args)
@@ -53,8 +56,11 @@ namespace FlappyBird
 			
 			enemy.Dispose();
 			
+<<<<<<< HEAD
 			bullet.Dispose();
 			
+=======
+>>>>>>> origin/master
 			Director.Terminate ();
 		}
 
@@ -92,9 +98,12 @@ namespace FlappyBird
 			
 			//Create the enemy
 			enemy = new Enemy( player, gameScene);
+<<<<<<< HEAD
 			
 			//Create the bullet
 			bullet = new Bullet(gameScene);
+=======
+>>>>>>> origin/master
 			
 			//Run the scene.
 			Director.Instance.RunWithScene(gameScene, true);
@@ -135,7 +144,12 @@ namespace FlappyBird
 				
 			player.Update(North, East, South, West);
 			
+<<<<<<< HEAD
 			enemy.Update();
+=======
+			enemy.Update(player);
+			
+>>>>>>> origin/master
 			
 			if (firing)
 			{

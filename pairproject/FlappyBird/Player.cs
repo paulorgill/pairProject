@@ -138,6 +138,7 @@ namespace FlappyBird
 			}
 		}
 		
+<<<<<<< HEAD
 		public float GetX()
 		{
 			return sprite.Position.X;
@@ -147,6 +148,8 @@ namespace FlappyBird
 		{
 			return sprite.Position.Y;
 		}
+=======
+>>>>>>> origin/master
 //		public void TappedUp()
 //		{
 //			if(!up)

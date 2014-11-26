@@ -68,7 +68,10 @@
     <Content Include="textures\zombiedown.png" />
     <Content Include="textures\zombieleft.png" />
     <Content Include="textures\zombieright.png" />
+<<<<<<< HEAD
     <Content Include="textures\bullet.png" />
     <Content Include="textures\playertest2.png" />
+=======
+>>>>>>> origin/master
   </ItemGroup>
 </Project>

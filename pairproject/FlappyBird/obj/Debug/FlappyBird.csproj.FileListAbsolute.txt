@@ -203,6 +203,7 @@ C:\Users\paul\Desktop\githubtest\pairProject\pairproject\FlappyBird\bin\Debug\Fl
 C:\Users\paul\Desktop\githubtest\pairProject\pairproject\FlappyBird\bin\Debug\FlappyBird-signed\Application\textures\zombiedown.png
 C:\Users\paul\Desktop\githubtest\pairProject\pairproject\FlappyBird\bin\Debug\FlappyBird-signed\Application\textures\zombieleft.png
 C:\Users\paul\Desktop\githubtest\pairProject\pairproject\FlappyBird\bin\Debug\FlappyBird-signed\Application\textures\zombieright.png
+<<<<<<< HEAD
 C:\Users\s005973c\Downloads\pairProject-master\pairproject\FlappyBird\bin\Debug\FlappyBird-unsigned\Application\app.info
 C:\Users\s005973c\Downloads\pairProject-master\pairproject\FlappyBird\bin\Debug\FlappyBird-unsigned\Application\shaders\Texture.cgx
 C:\Users\s005973c\Downloads\pairProject-master\pairproject\FlappyBird\bin\Debug\FlappyBird-unsigned\Application\app.exe
@@ -256,3 +257,5 @@ C:\Users\s005973c\Downloads\pairProject-master\pairproject\FlappyBird\bin\Debug\
 C:\Users\s005973c\Downloads\pairProject-master\pairproject\FlappyBird\bin\Debug\FlappyBird-unsigned\Application\textures\playertest2.png
 C:\Users\s005973c\Downloads\pairProject-master\pairproject\FlappyBird\bin\Debug\FlappyBird-signed\Application\textures\bullet.png
 C:\Users\s005973c\Downloads\pairProject-master\pairproject\FlappyBird\bin\Debug\FlappyBird-signed\Application\textures\playertest2.png
+=======
+>>>>>>> origin/master

@@ -17,7 +17,11 @@ namespace FlappyBird
 		private static TextureInfo	textureInfoRight;
 		private static TextureInfo	textureInfoLeft;
 		private static bool			enemyAlive;
+<<<<<<< HEAD
 		private static float 		enemySpeed = 3.0f;
+=======
+		private static float 		enemySpeed = 0.5f;
+>>>>>>> origin/master
 		private float width;
 		private float height;
 		
@@ -36,7 +40,11 @@ namespace FlappyBird
 			
 			// set enemy position
 			sprite.Position = new Vector2 (50.0f,200.0f);
+<<<<<<< HEAD
 			
+=======
+
+>>>>>>> origin/master
 			//Add to the current scene.
 			scene.AddChild(sprite);
 			
@@ -53,6 +61,7 @@ namespace FlappyBird
 		}
 	
 		
+<<<<<<< HEAD
 		public void Update()
 		{
 			sprite.Position = new Vector2(sprite.Position.X - enemySpeed, sprite.Position.Y );
@@ -64,6 +73,35 @@ namespace FlappyBird
 			
 			}
 			
+=======
+		public void Update(Player player )	
+		{
+			//player.Sprite.Position.X
+			//sprite.Position = new Vector2(sprite.Position.X - enemySpeed, sprite.Position.Y );
+			
+			if (player.Sprite.Position.X > sprite.Position.X)
+			{
+				sprite.Position = new Vector2(sprite.Position.X + enemySpeed,sprite.Position.Y);
+			
+			}
+			
+			else if (player.Sprite.Position.X < sprite.Position.X)
+			{
+				sprite.Position = new Vector2(sprite.Position.X - enemySpeed,sprite.Position.Y);
+			}
+			
+			if (player.Sprite.Position.Y > sprite.Position.Y)
+			{
+				sprite.Position = new Vector2(sprite.Position.X,sprite.Position.Y + enemySpeed);
+			
+			}
+			
+			else if (player.Sprite.Position.Y < sprite.Position.Y)
+			{
+				sprite.Position = new Vector2(sprite.Position.X ,sprite.Position.Y - enemySpeed);
+			}
+			
+>>>>>>> origin/master
 		}
 		
 		public bool HasCollidedWith(SpriteUV sprite)
