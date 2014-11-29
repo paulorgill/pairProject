@@ -17,7 +17,7 @@ namespace FlappyBird
 		
 		private static bool			alive;
 		private static float 		speed = 3.0f;
-		private float 				angle = 0.0f;
+		private static float 		angle = 0.0f;
 		
 		public bool Alive { get{return alive;} set{alive = value;} }
 		
@@ -90,6 +90,7 @@ namespace FlappyBird
 		
 		public void Update(bool n, bool e, bool s, bool w)
 		{
+			//sprite.Rotate(0.05f);
 			if (n == true)
 			{
 				sprite.Position = new Vector2(sprite.Position.X, sprite.Position.Y + speed);
@@ -138,6 +139,11 @@ namespace FlappyBird
 		public float GetY()
 		{
 			return sprite.Position.Y;
+		}
+		
+		public float GetAngle()
+		{
+			return sprite.Angle;
 		}
 		
 		public SpriteUV Sprite

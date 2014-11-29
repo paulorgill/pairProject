@@ -13,9 +13,9 @@ namespace FlappyBird
 		public Texture2D texture;
 		private static SpriteUV 	sprite;
 		private static TextureInfo	textureInfo;
-		public Vector2 position, velocity, direction;
+		private Vector2 direction, origin;
 		public bool isVisible;
-		float speed=4.5f;
+		float speed=3.5f;
 		
 		public Bullet(Scene scene)
 		{
@@ -39,6 +39,22 @@ namespace FlappyBird
 			sprite.Position = new Vector2(x, y);
 		}
 		
+		public void Fire(float x, float y, float angle)
+		{
+			ResetBullet(x,y);
+			origin = new Vector2(x,y);
+			direction = Vector2FromAngle(angle,true);
+		}
+		
+		
+		public static Vector2 Vector2FromAngle(float angle, bool normalize = true)
+		{
+		    Vector2 vector = new Vector2((float)FMath.Cos(angle), (float)FMath.Sin(angle));
+		    if (vector != Vector2.Zero && normalize)
+		        vector.Normalize();
+		    return vector;
+		}
+		
 //		public void Fire(Vector2 theStartPosition, Vector2 theSpeed, Vector2 theDirection)
 //        {
 //            position = theStartPosition;            
@@ -50,7 +66,11 @@ namespace FlappyBird
 		
 		public void Update()
 		{
-			sprite.Position = new Vector2(sprite.Position.X+speed, sprite.Position.Y);
+			sprite.Position = new Vector2(sprite.Position.X+direction.X*speed, sprite.Position.Y+direction.Y*speed);
+			if(Vector2.Distance(sprite.Position,origin) > 200)
+			{
+				ResetBullet(-500, -500);
+			}
 			//sprite.Position = new Vector2(x+=speed, y);
 			//Vector2 direction = Rotate(angle);
 			//sprite.Position.X -= speed;

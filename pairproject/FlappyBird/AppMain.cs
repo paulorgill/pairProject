@@ -9,7 +9,7 @@ using Sce.PlayStation.Core.Input;
 using Sce.PlayStation.HighLevel.GameEngine2D;
 using Sce.PlayStation.HighLevel.GameEngine2D.Base;
 using Sce.PlayStation.HighLevel.UI;
-	
+
 namespace FlappyBird
 {
 	public class AppMain
@@ -24,8 +24,6 @@ namespace FlappyBird
 		private static Background	background;
 		private static Enemy		enemy;
 		private static bool			North, South, East, West;
-		private static bool			firing = false;
-		
 				
 		public static void Main (string[] args)
 		{
@@ -100,13 +98,13 @@ namespace FlappyBird
 			Director.Instance.RunWithScene(gameScene, true);
 		}
 		
+		
 		public static void Update()
 		{
 			//Determine whether the player tapped the screen
 			var touches = Touch.GetData(0);
 			GamePadData data = GamePad.GetData(0);
-			
-			
+						
 			//Move the player
 			if (Input2.GamePad0.Up.Down)
 				North = true;
@@ -130,23 +128,14 @@ namespace FlappyBird
 			
 			if (Input2.GamePad0.Square.Down)
 			{
-				bullet.ResetBullet(player.GetX(), player.GetY());
-				firing = true;
+				//bullet.ResetBullet();
+				bullet.Fire(player.GetX(), player.GetY(), player.GetAngle());
 			}
 				
 			player.Update(North, East, South, West);
 			
-			if (firing)
-			{
-				if (bullet.GetX() > (player.GetX()+200))
-				{
-					firing = false;
-					bullet.ResetBullet(-500, -500);
-				}
-				else
-				bullet.Update();
-			}
-			
+			bullet.Update();
+						
 			enemy.Update(player);
 			
 			
