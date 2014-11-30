@@ -309,3 +309,7 @@ C:\Users\Alex\Dropbox\University Year 2\TECHNICAL GAMES PRODUCTION\GitHub\pairPr
 C:\Users\Alex\Dropbox\University Year 2\TECHNICAL GAMES PRODUCTION\GitHub\pairProject\pairproject\FlappyBird\obj\Debug\convertedpdb\app.exe.mdb
 C:\Users\Alex\Dropbox\University Year 2\TECHNICAL GAMES PRODUCTION\GitHub\pairProject\pairproject\FlappyBird\obj\Debug\app.exe
 C:\Users\Alex\Dropbox\University Year 2\TECHNICAL GAMES PRODUCTION\GitHub\pairProject\pairproject\FlappyBird\obj\Debug\app.pdb
+C:\Users\paul\Desktop\githubtest\pairProject\pairproject\FlappyBird\bin\Debug\FlappyBird-unsigned\Application\textures\bullet.png
+C:\Users\paul\Desktop\githubtest\pairProject\pairproject\FlappyBird\bin\Debug\FlappyBird-unsigned\Application\textures\playertest2.png
+C:\Users\paul\Desktop\githubtest\pairProject\pairproject\FlappyBird\bin\Debug\FlappyBird-signed\Application\textures\bullet.png
+C:\Users\paul\Desktop\githubtest\pairProject\pairproject\FlappyBird\bin\Debug\FlappyBird-signed\Application\textures\playertest2.png

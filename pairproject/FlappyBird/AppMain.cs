@@ -132,7 +132,7 @@ namespace FlappyBird
 				bullet.Fire(player.GetX(), player.GetY(), player.GetAngle());
 			}
 				
-			player.Update(North, East, South, West);
+			player.Update(North, East, South, West, gameScene);
 			
 			bullet.Update();
 						
@@ -143,24 +143,25 @@ namespace FlappyBird
 //			direction.Normalize();
 //			float rotationInRadians = (float)Math.Atan2((double)direction.Y, (double)direction.X) + MathHelper.PiOver2;
 			
+			if (player.Alive == true)
+				
+			{
+			
 			gameScene.Camera2D.SetViewY(new Vector2(0.0f,Director.Instance.GL.Context.GetViewport().Height*0.5f), player.GetPos());
 			
-			
+			}
 			
 			if(player.Alive)
 			{
 				//Move the background.
 				background.Update(0.0f);
 							
-				//Update the obstacles.
-				//bullet.Update(0.0f);
-				
-				
 			if (enemy.HasCollidedWith (player.Sprite) == true)
 				{
-					//quitGame = true; 
+					scoreLabel.Text = "1";
+					player.Alive = false; 
 				}
-			
+				
 			}
 		}
 		

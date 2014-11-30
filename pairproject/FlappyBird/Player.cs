@@ -28,7 +28,7 @@ namespace FlappyBird
 		public Player (Scene scene)
 		{
 			textureInfo  = new TextureInfo("/Application/textures/playertest2.png");
-			textureInfo1  = new TextureInfo("/Application/textures/bird.png");
+		
 			
 			sprite	 		= new SpriteUV();
 			sprite 			= new SpriteUV(textureInfo);	
@@ -88,7 +88,7 @@ namespace FlappyBird
 //		
 //		}	
 		
-		public void Update(bool n, bool e, bool s, bool w)
+		public void Update(bool n, bool e, bool s, bool w,Scene scene)
 		{
 			//sprite.Rotate(0.05f);
 			if (n == true)
@@ -124,8 +124,16 @@ namespace FlappyBird
 				sprite.Position = new Vector2(sprite.Position.X, sprite.Position.Y);
 			
 			}
+			
+			if (Alive == false )
+			{
+				//scene.AddChild(sprite);
+				scene.RemoveChild(sprite,false );
+				Player.alive = false; 
+			}
+			
 		}
-		
+
 		public Vector2 GetPos()
 		{
 			return sprite.Position;

@@ -11,7 +11,7 @@ namespace FlappyBird
 	public class Enemy
 	{
 		
-		private static SpriteUV 	sprite;
+		private static SpriteUV 	enemySprite;
 		private static TextureInfo	textureInfoUp;
 		private static TextureInfo	textureInfoDown;
 		private static TextureInfo	textureInfoRight;
@@ -29,21 +29,24 @@ namespace FlappyBird
 			textureInfoDown  = new TextureInfo("/Application/textures/zombiedown.png");
 			textureInfoRight  = new TextureInfo("/Application/textures/zombieright.png");
 			textureInfoLeft  = new TextureInfo("/Application/textures/zombieleft.png");
-			sprite	 		= new SpriteUV();
-			sprite 			= new SpriteUV(textureInfoDown);	
-			sprite.Quad.S 	= textureInfoUp.TextureSizef;
+			enemySprite	 		= new SpriteUV();
+			enemySprite	 	= new SpriteUV(textureInfoDown);	
+			
+			enemySprite.Quad.S = textureInfoUp.TextureSizef;
 			enemyAlive = true;
 			
-			// set enemy position
-			sprite.Position = new Vector2 (50.0f,200.0f);
-
-			//Add to the current scene.
-			scene.AddChild(sprite);
-			
 			// Get sprite bounds
-			Bounds2 b = sprite.Quad.Bounds2();
+			Bounds2 b = enemySprite.Quad.Bounds2();
 			width = b.Point10.X;
 			height = b.Point01.Y;
+			
+			// set enemy position
+			enemySprite.Position = new Vector2 (50.0f,200.0f);
+
+			//Add to the current scene.
+			scene.AddChild(enemySprite);
+			
+			
 			
 		}
 		
@@ -55,55 +58,55 @@ namespace FlappyBird
 		
 		public void Update(Player player )	
 		{
-			//player.Sprite.Position.X
-			//sprite.Position = new Vector2(sprite.Position.X - enemySpeed, sprite.Position.Y );
+			if (player.Alive == true)
+		{
 			
-			if (player.Sprite.Position.X > sprite.Position.X)
+			if (player.Sprite.Position.X > enemySprite.Position.X)
 			{
-				sprite.Position = new Vector2(sprite.Position.X + enemySpeed,sprite.Position.Y);
+				enemySprite.Position = new Vector2(enemySprite.Position.X + enemySpeed,enemySprite.Position.Y);
 			
 			}
 			
-			else if (player.Sprite.Position.X < sprite.Position.X)
+			else if (player.Sprite.Position.X < enemySprite.Position.X)
 			{
-				sprite.Position = new Vector2(sprite.Position.X - enemySpeed,sprite.Position.Y);
+				enemySprite.Position = new Vector2(enemySprite.Position.X - enemySpeed,enemySprite.Position.Y);
 			}
 			
-			if (player.Sprite.Position.Y > sprite.Position.Y)
+			if (player.Sprite.Position.Y > enemySprite.Position.Y)
 			{
-				sprite.Position = new Vector2(sprite.Position.X,sprite.Position.Y + enemySpeed);
+				enemySprite.Position = new Vector2(enemySprite.Position.X,enemySprite.Position.Y + enemySpeed);
 			
 			}
 			
-			else if (player.Sprite.Position.Y < sprite.Position.Y)
+			else if (player.Sprite.Position.Y < enemySprite.Position.Y)
 			{
-				sprite.Position = new Vector2(sprite.Position.X ,sprite.Position.Y - enemySpeed);
+				enemySprite.Position = new Vector2(enemySprite.Position.X ,enemySprite.Position.Y - enemySpeed);
 			}
-			
+		
+		}
 		}
 		
-		public bool HasCollidedWith(SpriteUV sprite)
+	
+			public bool HasCollidedWith(SpriteUV sprite)
 		{
-			Bounds2 zombie = sprite.GetlContentLocalBounds();
-			sprite.GetContentWorldBounds(ref zombie);
+			Bounds2 enemy = sprite.GetlContentLocalBounds();
+			enemySprite.GetContentWorldBounds(ref enemy );
+			
+			
 			
 			Bounds2 player = sprite.GetlContentLocalBounds();
 			sprite.GetContentWorldBounds(ref player);
 			
-			if (player.Overlaps(zombie))
+			if (player.Overlaps(enemy))
 			{
 				return true; 
 			}
-			
 			
 			else 
 			{
 				return false;
 			}
 		}
-		
-		
-		
 		
 	}
 }
