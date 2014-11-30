@@ -35,6 +35,7 @@ namespace FlappyBird
 			sprite.Quad.S 	= textureInfo.TextureSizef;
 			sprite.Position = new Vector2(0.0f,0.0f);
 			//sprite.Pivot 	= new Vector2(0.5f,0.5f);
+			sprite.CenterSprite(new Vector2(0.5f,0.5f));
 			alive = true;
 			
 			//Add to the current scene.
@@ -88,9 +89,11 @@ namespace FlappyBird
 //		
 //		}	
 		
-		public void Update(bool n, bool e, bool s, bool w,Scene scene)
+		public void Update(bool n, bool e, bool s, bool w, Vector2 rotation, Scene scene)
 		{
-			//sprite.Rotate(0.05f);
+			//sprite.RotationNormalize = rotation;
+			sprite.Rotate(0.01f);
+			
 			if (n == true)
 			{
 				sprite.Position = new Vector2(sprite.Position.X, sprite.Position.Y + speed);

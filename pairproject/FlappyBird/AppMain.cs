@@ -23,7 +23,9 @@ namespace FlappyBird
 		private static Player		player;
 		private static Background	background;
 		private static Enemy		enemy;
-		private static bool			North, South, East, West;
+		private static bool			North, South, East, West, firing = false;
+		private static float 		analogX, analogY;
+		private static Vector2 		playerRotation;
 				
 		public static void Main (string[] args)
 		{
@@ -107,48 +109,90 @@ namespace FlappyBird
 						
 			//Move the player
 			if (Input2.GamePad0.Up.Down)
+			{
 				North = true;
-			else
+				analogY = -1.0f;
+			}
+				else
+			{
 				North = false;
+				analogY = 0.0f;
+			}
 			
 			if (Input2.GamePad0.Left.Down)
+			{
 				West = true;
-			else
+				analogX = -1.0f;
+			}
+				else
+			{
 				West = false;
+				analogX = 0.0f;
+			}
 			
 			if (Input2.GamePad0.Right.Down)
+			{
 				East = true;
-			else
+				analogX = 1.0f;
+			}
+				else
+			{
 				East = false;
+				analogX = 0.0f;
+			}
 			
 			if (Input2.GamePad0.Down.Down)
+			{
 				South = true;
-			else
+				analogY = 1.0f;
+			}
+				else
+			{
 				South = false;
+				analogY = 0.0f;
+			}
 			
 			if (Input2.GamePad0.Square.Down)
 			{
-				//bullet.ResetBullet();
-				bullet.Fire(player.GetX(), player.GetY(), player.GetAngle());
+				if (!firing)
+				{
+					bullet.Fire(player.GetX(), player.GetY(), player.GetAngle());
+					firing = true;
+				}
+				//Input2.GamePad0.Square.Down = false;
+			}
+			Vector2 bulletPos = bullet.GetPos();
+			if(bulletPos.X == -500 && bulletPos.Y == -500)
+				firing = false;
+			    			
+			//rotate according to the right analog stick, or if it's not moving, then according the the left stick
+			//so basically if you are not pointing the player in any direction with the right stick he is going to point in the walking direction
+			//or if both sticks are not moving,then use the analogX and analogY values(d-pad movement)
+			if (data.AnalogRightX > 0.2f || data.AnalogRightX < -0.2f || data.AnalogRightY > 0.2f || data.AnalogRightY < -0.2f) 
+			{
+				var angleInRadians = FMath.Atan2 (-data.AnalogRightX, -data.AnalogRightY);
+				playerRotation = new Vector2 (FMath.Cos (angleInRadians), FMath.Sin (angleInRadians));
+			} 
+			else if (data.AnalogLeftX > 0.2f || data.AnalogLeftX < -0.2f || data.AnalogLeftY > 0.2f || data.AnalogLeftY < -0.2f) 
+			{
+				var angleInRadians = FMath.Atan2 (-data.AnalogLeftX, -data.AnalogLeftY);
+				playerRotation = new Vector2 (FMath.Cos (angleInRadians), FMath.Sin (angleInRadians));
+			} 
+			else if(analogX != 0.0f || analogY != 0.0f)
+			{
+				var angleInRadians = FMath.Atan2 (-analogX, -analogY);
+				playerRotation = new Vector2 (FMath.Cos (angleInRadians), FMath.Sin (angleInRadians));
 			}
 				
-			player.Update(North, East, South, West, gameScene);
+			player.Update(North, East, South, West, playerRotation, gameScene);
 			
 			bullet.Update();
 						
 			enemy.Update(player);
 			
-			
-//			Vector2 direction = targetPosition - currentPosition;
-//			direction.Normalize();
-//			float rotationInRadians = (float)Math.Atan2((double)direction.Y, (double)direction.X) + MathHelper.PiOver2;
-			
 			if (player.Alive == true)
-				
 			{
-			
-			gameScene.Camera2D.SetViewY(new Vector2(0.0f,Director.Instance.GL.Context.GetViewport().Height*0.5f), player.GetPos());
-			
+				gameScene.Camera2D.SetViewY(new Vector2(0.0f,Director.Instance.GL.Context.GetViewport().Height*0.5f), player.GetPos());
 			}
 			
 			if(player.Alive)

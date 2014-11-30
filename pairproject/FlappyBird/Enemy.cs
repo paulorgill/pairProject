@@ -45,9 +45,6 @@ namespace FlappyBird
 
 			//Add to the current scene.
 			scene.AddChild(enemySprite);
-			
-			
-			
 		}
 		
 		public void Dispose()
