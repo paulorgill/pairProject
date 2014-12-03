@@ -80,6 +80,14 @@ namespace FlappyBird
 		{
 			return sprite.Position.X;
 		}
+		
+		public SpriteUV Sprite
+		{
+			get
+			{
+				return sprite;
+			}
+		}
 			
 			
 //		const float kGap = 200.0f;

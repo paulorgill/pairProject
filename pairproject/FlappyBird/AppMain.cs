@@ -136,7 +136,7 @@ namespace FlappyBird
 			
 			bullet.Update();
 						
-			enemy.Update(player);
+			enemy.Update(enemy, player, gameScene);
 			
 			
 //			Vector2 direction = targetPosition - currentPosition;
@@ -155,11 +155,21 @@ namespace FlappyBird
 			{
 				//Move the background.
 				background.Update(0.0f);
+				
+				if (enemy.Alive )
+				{
 							
-			if (enemy.HasCollidedWith (player.Sprite) == true)
+			if (enemy.HasCollidedWithPlayer (player.Sprite) == true)
 				{
 					scoreLabel.Text = "1";
 					player.Alive = false; 
+				}
+				
+				if (enemy.HasCollidedWithBullet (bullet.Sprite) == true)
+				{
+					scoreLabel.Text = "1";
+					enemy.Alive = false; 
+				}
 				}
 				
 			}

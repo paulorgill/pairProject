@@ -21,6 +21,8 @@ namespace FlappyBird
 		private float width;
 		private float height;
 		
+		public bool Alive { get{return enemyAlive;} set{enemyAlive = value;} }
+		
 		
 		
 		public Enemy ( Player player ,Scene scene)
@@ -56,39 +58,51 @@ namespace FlappyBird
 		}
 	
 		
-		public void Update(Player player )	
+		public void Update(Enemy enemy,Player player, Scene scene )	
 		{
-			if (player.Alive == true)
-		{
+			if (enemy.Alive == true)
+				{
 			
-			if (player.Sprite.Position.X > enemySprite.Position.X)
-			{
-				enemySprite.Position = new Vector2(enemySprite.Position.X + enemySpeed,enemySprite.Position.Y);
+					if (player.Alive == true)
+						{
 			
-			}
+					if (player.Sprite.Position.X > enemySprite.Position.X)
+						{
+							enemySprite.Position = new Vector2(enemySprite.Position.X + enemySpeed,enemySprite.Position.Y);
 			
-			else if (player.Sprite.Position.X < enemySprite.Position.X)
-			{
-				enemySprite.Position = new Vector2(enemySprite.Position.X - enemySpeed,enemySprite.Position.Y);
-			}
+						}
 			
-			if (player.Sprite.Position.Y > enemySprite.Position.Y)
-			{
-				enemySprite.Position = new Vector2(enemySprite.Position.X,enemySprite.Position.Y + enemySpeed);
+					else if (player.Sprite.Position.X < enemySprite.Position.X)
+						{
+							enemySprite.Position = new Vector2(enemySprite.Position.X - enemySpeed,enemySprite.Position.Y);
+						}
 			
-			}
+					if (player.Sprite.Position.Y > enemySprite.Position.Y)
+						{
+							enemySprite.Position = new Vector2(enemySprite.Position.X,enemySprite.Position.Y + enemySpeed);
 			
-			else if (player.Sprite.Position.Y < enemySprite.Position.Y)
-			{
-				enemySprite.Position = new Vector2(enemySprite.Position.X ,enemySprite.Position.Y - enemySpeed);
-			}
-		
+						}
+			
+					else if (player.Sprite.Position.Y < enemySprite.Position.Y)
+						{
+							enemySprite.Position = new Vector2(enemySprite.Position.X ,enemySprite.Position.Y - enemySpeed);
+						}
+				}
 		}
+			
+			if (Alive == false )
+			{
+				//scene.AddChild(sprite);
+				scene.RemoveChild(enemySprite,false );
+				Enemy.enemyAlive = false;
+			}
 		}
 		
 	
-			public bool HasCollidedWith(SpriteUV sprite)
+			public bool HasCollidedWithPlayer(SpriteUV sprite)
 		{
+			
+			
 			Bounds2 enemy = sprite.GetlContentLocalBounds();
 			enemySprite.GetContentWorldBounds(ref enemy );
 			
@@ -98,6 +112,29 @@ namespace FlappyBird
 			sprite.GetContentWorldBounds(ref player);
 			
 			if (player.Overlaps(enemy))
+			{
+				return true; 
+			}
+			
+			else 
+			{
+				return false;
+			
+			}
+			
+		}
+		
+			public bool HasCollidedWithBullet(SpriteUV sprite)
+		{
+			Bounds2 enemy = sprite.GetlContentLocalBounds();
+			enemySprite.GetContentWorldBounds(ref enemy );
+			
+			
+			
+			Bounds2 bullet = sprite.GetlContentLocalBounds();
+			sprite.GetContentWorldBounds(ref bullet);
+			
+			if (bullet.Overlaps(enemy))
 			{
 				return true; 
 			}
