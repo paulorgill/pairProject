@@ -58,6 +58,10 @@
     <ShaderProgram Include="shaders\Texture.vcg" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="textures\bottompipe.png" />
+    <Content Include="textures\bird.png" />
+    <Content Include="textures\toppipe.png" />
+    <Content Include="textures\background.png" />
     <Content Include="textures\floor.png" />
     <Content Include="textures\playertest.png" />
     <Content Include="textures\zombie.png" />
@@ -66,7 +70,10 @@
     <Content Include="textures\zombieright.png" />
     <Content Include="textures\bullet.png" />
     <Content Include="textures\playertest2.png" />
-    <Content Include="textures\floor50x50.png" />
+    <Content Include="textures\floor1.png" />
     <Content Include="textures\a1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="textures\Thumbs.db" />
   </ItemGroup>
 </Project>

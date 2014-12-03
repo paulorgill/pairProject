@@ -131,9 +131,10 @@ namespace FlappyBird
 		}
 		
 			public bool HasCollidedWithBullet(SpriteUV sprite)
-			{
+		{
 			Bounds2 enemy = sprite.GetlContentLocalBounds();
 			enemySprite.GetContentWorldBounds(ref enemy );
+			
 			
 			
 			Bounds2 bullet = sprite.GetlContentLocalBounds();

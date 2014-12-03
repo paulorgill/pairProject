@@ -11,25 +11,38 @@ namespace FlappyBird
 	public class Background
 	{	
 		//Private variables.
-		private SpriteUV[,] 	sprites;
+		private SpriteUV[] 	sprites;
 		private TextureInfo	textureInfo;
+		private float		width;
 		
 		//Public functions.
 		public Background (Scene scene)
 		{
-			sprites	= new SpriteUV[1,1];
+			sprites	= new SpriteUV[1];
 			
 			textureInfo  		= new TextureInfo("/Application/textures/a1.png");
+			//Left
+			sprites[0] 			= new SpriteUV(textureInfo);
+			sprites[0].Quad.S 	= textureInfo.TextureSizef/0.3f;
+			//Middle
+			//sprites[1] 			= new SpriteUV(textureInfo);
+			//sprites[1].Quad.S 	= textureInfo.TextureSizef;
+			//Right
+			//sprites[2] 			= new SpriteUV(textureInfo);
+			//sprites[2].Quad.S 	= textureInfo.TextureSizef;
 			
-			for (int i = 0; i < 1; ++i)
-			{
-    			for (int j = 0; j < 1; ++j)
-				{
-					sprites[i,j] 			= new SpriteUV(textureInfo);
-					sprites[i,j].Quad.S 		= textureInfo.TextureSizef;
-					sprites[i,j].Position = new Vector2(50.0f*i, 50.0f*j);
-				}
-			}
+			//Get sprite bounds.
+			Bounds2 b = sprites[0].Quad.Bounds2();
+			width     = b.Point10.X;
+			
+			//Position pipes.
+			//sprites[0].Position = new Vector2(-200.0f, -100.0f);
+			sprites[0].Position = new Vector2(-1500.0f, -550.0f);
+			
+			//sprites[1].Position = new Vector2(sprites[0].Position.X+width, 0.0f);
+			
+			//sprites[2].Position = new Vector2(sprites[1].Position.X+width, 0.0f);
+			
 			//Add to the current scene.
 			foreach(SpriteUV sprite in sprites)
 				scene.AddChild(sprite);
@@ -41,12 +54,9 @@ namespace FlappyBird
 			textureInfo.Dispose();
 		}
 		
-		public void Update(Vector2 playerPos)
-		{	
-			//Only display squares within 200 of the player
-			
-					
-			//sprites[0].Position = new Vector2(sprites[0].Position.X 0.5f, sprites[0].Position.Y);
+		public void Update(float deltaTime, Player player)
+		{			
+			//sprites[0].Position = new Vector2(player.Sprite.Position.X, player.Sprite.Position.Y);
 			///sprites[1].Position = new Vector2(sprites[1].Position.X - 0.5f, sprites[1].Position.Y);
 			//sprites[2].Position = new Vector2(sprites[2].Position.X - 0.5f, sprites[2].Position.Y);
 			
