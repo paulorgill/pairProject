@@ -13,9 +13,10 @@ namespace FlappyBird
 		public Texture2D texture;
 		private static SpriteUV 	sprite;
 		private static TextureInfo	textureInfo;
+		private static float 		angle = 0.0f;
 		private Vector2 direction, origin;
 		public bool isVisible;
-		float speed=3.5f;
+		float speed=4.5f;
 		
 		public Bullet(Scene scene)
 		{
@@ -25,8 +26,9 @@ namespace FlappyBird
 			sprite 			= new SpriteUV(textureInfo);	
 			sprite.Quad.S 	= textureInfo.TextureSizef/4;
 			sprite.Position = new Vector2(-500, -500);
+			sprite.CenterSprite(new Vector2(0.5f,0.5f));
 			scene.AddChild(sprite);
-			isVisible = false;
+			sprite.Visible = false;
 		}
 		
 		public void Dispose()
@@ -37,13 +39,18 @@ namespace FlappyBird
 		public void ResetBullet(float x, float y)
 		{
 			sprite.Position = new Vector2(x, y);
+			sprite.Visible = false;
 		}
 		
 		public void Fire(float x, float y, float angle)
 		{
 			ResetBullet(x,y);
+			sprite.Visible = true;
 			origin = new Vector2(x,y);
-			direction = Vector2FromAngle(angle,true);
+			direction = Vector2FromAngle(angle-45.5f,true);
+			//sprite.RotateTo(direction);
+			sprite.RotationNormalize = direction;
+			
 		}
 		
 		
@@ -76,9 +83,9 @@ namespace FlappyBird
 			//sprite.Position.X -= speed;
 		}
 		
-		public float GetX()
+		public Vector2 GetPos()
 		{
-			return sprite.Position.X;
+			return sprite.Position;
 		}
 		
 		public SpriteUV Sprite
