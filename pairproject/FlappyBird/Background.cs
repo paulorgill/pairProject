@@ -20,7 +20,7 @@ namespace FlappyBird
 		{
 			sprites	= new SpriteUV[1];
 			
-			textureInfo  		= new TextureInfo("/Application/textures/floor.png");
+			textureInfo  		= new TextureInfo("/Application/textures/a1.png");
 			//Left
 			sprites[0] 			= new SpriteUV(textureInfo);
 			sprites[0].Quad.S 	= textureInfo.TextureSizef/0.3f;
@@ -36,7 +36,8 @@ namespace FlappyBird
 			width     = b.Point10.X;
 			
 			//Position pipes.
-			sprites[0].Position = new Vector2(-200.0f, -100.0f);
+			//sprites[0].Position = new Vector2(-200.0f, -100.0f);
+			sprites[0].Position = new Vector2(-1500.0f, -550.0f);
 			
 			//sprites[1].Position = new Vector2(sprites[0].Position.X+width, 0.0f);
 			
@@ -53,9 +54,9 @@ namespace FlappyBird
 			textureInfo.Dispose();
 		}
 		
-		public void Update(float deltaTime)
+		public void Update(float deltaTime, Player player)
 		{			
-			//sprites[0].Position = new Vector2(sprites[0].Position.X 0.5f, sprites[0].Position.Y);
+			//sprites[0].Position = new Vector2(player.Sprite.Position.X, player.Sprite.Position.Y);
 			///sprites[1].Position = new Vector2(sprites[1].Position.X - 0.5f, sprites[1].Position.Y);
 			//sprites[2].Position = new Vector2(sprites[2].Position.X - 0.5f, sprites[2].Position.Y);
 			

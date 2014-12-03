@@ -34,6 +34,8 @@ namespace FlappyBird
 			enemySprite	 		= new SpriteUV();
 			enemySprite	 	= new SpriteUV(textureInfoDown);	
 			
+		
+			
 			enemySprite.Quad.S = textureInfoUp.TextureSizef;
 			enemyAlive = true;
 			
@@ -69,23 +71,27 @@ namespace FlappyBird
 					if (player.Sprite.Position.X > enemySprite.Position.X)
 						{
 							enemySprite.Position = new Vector2(enemySprite.Position.X + enemySpeed,enemySprite.Position.Y);
-			
+							enemySprite.TextureInfo = textureInfoRight;
 						}
 			
-					else if (player.Sprite.Position.X < enemySprite.Position.X)
+					if (player.Sprite.Position.X < enemySprite.Position.X)
 						{
 							enemySprite.Position = new Vector2(enemySprite.Position.X - enemySpeed,enemySprite.Position.Y);
+							enemySprite.TextureInfo = textureInfoLeft;
 						}
+					
 			
 					if (player.Sprite.Position.Y > enemySprite.Position.Y)
 						{
 							enemySprite.Position = new Vector2(enemySprite.Position.X,enemySprite.Position.Y + enemySpeed);
+							enemySprite.TextureInfo = textureInfoUp;
 			
 						}
 			
-					else if (player.Sprite.Position.Y < enemySprite.Position.Y)
+					if (player.Sprite.Position.Y < enemySprite.Position.Y)
 						{
 							enemySprite.Position = new Vector2(enemySprite.Position.X ,enemySprite.Position.Y - enemySpeed);
+							enemySprite.TextureInfo = textureInfoDown;
 						}
 				}
 		}

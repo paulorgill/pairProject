@@ -154,7 +154,7 @@ namespace FlappyBird
 			if(player.Alive)
 			{
 				//Move the background.
-				background.Update(0.0f);
+				background.Update(0.0f, player);
 				
 				if (enemy.Alive )
 				{
