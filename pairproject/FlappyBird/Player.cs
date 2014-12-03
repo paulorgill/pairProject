@@ -13,11 +13,11 @@ namespace FlappyBird
 		//Private variables.
 		private static SpriteUV 	sprite;
 		private static TextureInfo	textureInfo;
-		private static TextureInfo	textureInfo1;
-		
+			
 		private static bool			alive;
 		private static float 		speed = 3.0f;
 		private static float 		angle = 0.0f;
+		private static float 		rotation = 0.0f;
 		
 		public bool Alive { get{return alive;} set{alive = value;} }
 		
@@ -28,13 +28,12 @@ namespace FlappyBird
 		public Player (Scene scene)
 		{
 			textureInfo  = new TextureInfo("/Application/textures/playertest2.png");
-		
-			
+					
 			sprite	 		= new SpriteUV();
 			sprite 			= new SpriteUV(textureInfo);	
 			sprite.Quad.S 	= textureInfo.TextureSizef;
-			sprite.Position = new Vector2(0.0f,0.0f);
-			//sprite.Pivot 	= new Vector2(0.5f,0.5f);
+			sprite.Position = new Vector2(500.0f,500.0f);
+			sprite.CenterSprite(new Vector2(0.5f,0.5f));
 			alive = true;
 			
 			//Add to the current scene.
@@ -88,9 +87,12 @@ namespace FlappyBird
 //		
 //		}	
 		
-		public void Update(bool n, bool e, bool s, bool w,Scene scene)
+		public void Update(bool n, bool e, bool s, bool w, Vector2 playerRotation, Scene scene)
 		{
-			//sprite.Rotate(0.05f);
+			rotation = -(float)FMath.Atan2(playerRotation.Y, playerRotation.X);
+			sprite.Angle = rotation;
+			//sprite.Rotate(rotation.Xy);
+			
 			if (n == true)
 			{
 				sprite.Position = new Vector2(sprite.Position.X, sprite.Position.Y + speed);
@@ -133,7 +135,7 @@ namespace FlappyBird
 			}
 			
 		}
-
+		
 		public Vector2 GetPos()
 		{
 			return sprite.Position;
