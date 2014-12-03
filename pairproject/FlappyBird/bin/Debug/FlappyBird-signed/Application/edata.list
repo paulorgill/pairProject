@@ -8,10 +8,6 @@ System.Core.dll
 System.ServiceModel.Web.dll
 System.ServiceModel.dll
 Sce.PlayStation.HighLevel.UI.dll
-textures/bottompipe.png
-textures/bird.png
-textures/toppipe.png
-textures/background.png
 textures/floor.png
 textures/playertest.png
 textures/zombie.png
@@ -20,3 +16,5 @@ textures/zombieleft.png
 textures/zombieright.png
 textures/bullet.png
 textures/playertest2.png
+textures/floor50x50.png
+textures/a1.png

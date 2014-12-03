@@ -17,17 +17,17 @@ namespace FlappyBird
 		//Public functions.
 		public Background (Scene scene)
 		{
-			sprites	= new SpriteUV[1,1];
+			sprites	= new SpriteUV[3,3];
 			
 			textureInfo  		= new TextureInfo("/Application/textures/a1.png");
 			
-			for (int i = 0; i < 1; ++i)
+			for (int i = 0; i < 3; ++i)
 			{
-    			for (int j = 0; j < 1; ++j)
+    			for (int j = 0; j < 3; ++j)
 				{
 					sprites[i,j] 			= new SpriteUV(textureInfo);
 					sprites[i,j].Quad.S 		= textureInfo.TextureSizef;
-					sprites[i,j].Position = new Vector2(50.0f*i, 50.0f*j);
+					sprites[i,j].Position = new Vector2(1000.0f*i, 1000.0f*j);
 				}
 			}
 			//Add to the current scene.

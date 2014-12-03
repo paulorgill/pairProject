@@ -16,8 +16,8 @@ namespace FlappyBird
 			
 		private static bool			alive;
 		private static float 		speed = 3.0f;
-		private static float 		angle = 0.0f;
-		private static float 		rotation = 0.0f;
+		private static float 		rotationAngle = 0.0f, movementAngle = 0.0f;
+		private static Vector2 		movementVector;
 		
 		public bool Alive { get{return alive;} set{alive = value;} }
 		
@@ -86,14 +86,30 @@ namespace FlappyBird
 //			
 //		
 //		}	
-		
-		public void Update(bool n, bool e, bool s, bool w, Vector2 playerRotation, Scene scene)
+		public void UpdateUsingANALOG(Vector2 playerMovement, Vector2 playerRotation, Scene scene)
 		{
-			rotation = -(float)FMath.Atan2(playerRotation.Y, playerRotation.X);
-			sprite.Angle = rotation;
-			//sprite.Rotate(rotation.Xy);
+			rotationAngle = -(float)FMath.Atan2(playerRotation.X, playerRotation.Y);
+			sprite.Angle = rotationAngle-45.555f;
 			
-			if (n == true)
+			movementAngle = -(float)FMath.Atan2(playerMovement.X, playerMovement.Y);
+			movementVector = Vector2FromAngle(movementAngle-91.1f,true);
+			
+			sprite.Position = new Vector2(sprite.Position.X+(movementVector.X*speed), sprite.Position.Y+(movementVector.Y*speed));
+			
+			if (Alive == false )
+			{
+				//scene.AddChild(sprite);
+				scene.RemoveChild(sprite,false );
+				Player.alive = false; 
+			}
+		}
+		
+		public void UpdateUsingDPAD(float playerDirectionX, float playerDirectionY, Vector2 playerRotation, Scene scene)
+		{
+			rotationAngle = -(float)FMath.Atan2(playerRotation.X, playerRotation.Y);
+			sprite.Angle = rotationAngle-45.555f;
+						
+			if (playerDirectionY == -1.0f) //North
 			{
 				sprite.Position = new Vector2(sprite.Position.X, sprite.Position.Y + speed);
 			}
@@ -101,7 +117,7 @@ namespace FlappyBird
 			{
 				sprite.Position = new Vector2(sprite.Position.X, sprite.Position.Y);
 			}
-			if (s == true)	
+			if (playerDirectionY == 1.0f)	//South
 			{
 				sprite.Position = new Vector2(sprite.Position.X, sprite.Position.Y - speed);
 			}
@@ -109,7 +125,7 @@ namespace FlappyBird
 			{
 				sprite.Position = new Vector2(sprite.Position.X, sprite.Position.Y);
 			}
-			if (w == true)
+			if (playerDirectionX == -1.0f) //West
 			{
 				sprite.Position = new Vector2(sprite.Position.X - speed, sprite.Position.Y);
 			}
@@ -117,15 +133,47 @@ namespace FlappyBird
 			{
 				sprite.Position = new Vector2(sprite.Position.X, sprite.Position.Y);
 			}
-			if (e == true)
+			if (playerDirectionX == 1.0f) //East
 			{
 				sprite.Position = new Vector2(sprite.Position.X + speed, sprite.Position.Y);
 			}
 			else
 			{
 				sprite.Position = new Vector2(sprite.Position.X, sprite.Position.Y);
-			
 			}
+								
+//			if (n == true)
+//			{
+//				sprite.Position = new Vector2(sprite.Position.X, sprite.Position.Y + speed);
+//			}
+//			else
+//			{
+//				sprite.Position = new Vector2(sprite.Position.X, sprite.Position.Y);
+//			}
+//			if (s == true)	
+//			{
+//				sprite.Position = new Vector2(sprite.Position.X, sprite.Position.Y - speed);
+//			}
+//			else
+//			{
+//				sprite.Position = new Vector2(sprite.Position.X, sprite.Position.Y);
+//			}
+//			if (w == true)
+//			{
+//				sprite.Position = new Vector2(sprite.Position.X - speed, sprite.Position.Y);
+//			}
+//			else
+//			{
+//				sprite.Position = new Vector2(sprite.Position.X, sprite.Position.Y);
+//			}
+//			if (e == true)
+//			{
+//				sprite.Position = new Vector2(sprite.Position.X + speed, sprite.Position.Y);
+//			}
+//			else
+//			{
+//				sprite.Position = new Vector2(sprite.Position.X, sprite.Position.Y);
+//			}
 			
 			if (Alive == false )
 			{
@@ -162,6 +210,14 @@ namespace FlappyBird
 			{
 				return sprite;
 			}
+		}
+		
+		public static Vector2 Vector2FromAngle(float angle, bool normalize = true)
+		{
+		    Vector2 vector = new Vector2((float)FMath.Cos(angle), (float)FMath.Sin(angle));
+		    if (vector != Vector2.Zero && normalize)
+		        vector.Normalize();
+		    return vector;
 		}
 		
 //		public void TappedUp()

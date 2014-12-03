@@ -33,9 +33,7 @@ namespace FlappyBird
 			textureInfoLeft  = new TextureInfo("/Application/textures/zombieleft.png");
 			enemySprite	 		= new SpriteUV();
 			enemySprite	 	= new SpriteUV(textureInfoDown);	
-			
-		
-			
+						
 			enemySprite.Quad.S = textureInfoUp.TextureSizef;
 			enemyAlive = true;
 			
@@ -46,12 +44,10 @@ namespace FlappyBird
 			
 			// set enemy position
 			enemySprite.Position = new Vector2 (50.0f,200.0f);
+			enemySprite.CenterSprite(new Vector2(0.5f,0.5f));
 
 			//Add to the current scene.
 			scene.AddChild(enemySprite);
-			
-			
-			
 		}
 		
 		public void Dispose()

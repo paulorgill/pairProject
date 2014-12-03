@@ -16,7 +16,7 @@ namespace FlappyBird
 		private static float 		angle = 0.0f;
 		private Vector2 direction, origin;
 		public bool isVisible;
-		float speed=4.5f;
+		float speed=10.0f;
 		
 		public Bullet(Scene scene)
 		{
@@ -47,12 +47,10 @@ namespace FlappyBird
 			ResetBullet(x,y);
 			sprite.Visible = true;
 			origin = new Vector2(x,y);
-			direction = Vector2FromAngle(angle-45.5f,true);
+			direction = Vector2FromAngle(angle-45.55f,true);
 			//sprite.RotateTo(direction);
 			sprite.RotationNormalize = direction;
-			
 		}
-		
 		
 		public static Vector2 Vector2FromAngle(float angle, bool normalize = true)
 		{
@@ -71,13 +69,18 @@ namespace FlappyBird
 //            Visible = true;
 //        }
 		
-		public void Update()
+		public void Update(bool firing)
 		{
-			sprite.Position = new Vector2(sprite.Position.X+direction.X*speed, sprite.Position.Y+direction.Y*speed);
-			if(Vector2.Distance(sprite.Position,origin) > 200)
+			if (firing)
 			{
-				ResetBullet(-500, -500);
+				sprite.Position = new Vector2(sprite.Position.X+direction.X*speed, sprite.Position.Y+direction.Y*speed);
+				if(Vector2.Distance(sprite.Position,origin) > 300)
+				{
+					ResetBullet(-500, -500);
+				}
 			}
+			else
+				sprite.Visible = false;
 			//sprite.Position = new Vector2(x+=speed, y);
 			//Vector2 direction = Rotate(angle);
 			//sprite.Position.X -= speed;

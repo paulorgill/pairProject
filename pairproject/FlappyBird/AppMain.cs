@@ -18,13 +18,13 @@ namespace FlappyBird
 		private static Sce.PlayStation.HighLevel.UI.Scene 				uiScene;
 		private static Sce.PlayStation.HighLevel.UI.Label				scoreLabel;
 		
-		private static bool North, South, East, West, firing = false, quitGame = false;
+		private static bool 		firing = false, quitGame = false;
 		private static Bullet		bullet;
 		private static Player		player;
 		private static Background	background;
 		private static Enemy		enemy;
 		private static float 		analogX, analogY;
-		private static Vector2 		playerRotation = new Vector2((0.0f),(0.0f));
+		private static Vector2 		playerRotation = new Vector2((0.0f),(0.0f)), playerMovement = new Vector2((0.0f),(0.0f)); 
 				
 		public static void Main (string[] args)
 		{
@@ -109,49 +109,30 @@ namespace FlappyBird
 			//Move the player using basic boolean logic
 			if (Input2.GamePad0.Up.Down)
 			{
-				North = true;
-				analogY = 1.0f;
+				analogY = -1.0f;
 			}
 				else
 			{
-				North = false;
 				analogY = 0.0f;
 			}
 			
 			if (Input2.GamePad0.Left.Down)
 			{
-				West = true;
 				analogX = -1.0f;
 			}
 				else
 			{
-				West = false;
 				analogX = 0.0f;
 			}
 			
 			if (Input2.GamePad0.Right.Down)
-			{
-				East = true;
 				analogX = 1.0f;
-			}
-				else
-			{
-				East = false;
-				//analogX = 0.0f;
-			}
-			
+					
 			if (Input2.GamePad0.Down.Down)
-			{
-				South = true;
-				analogY = -1.0f;
-			}
-				else
-			{
-				South = false;
-				//analogY = 0.0f;
-			}
+				analogY = 1.0f;
 			
-			if (Input2.GamePad0.Square.Down)
+			
+			if (Input2.GamePad0.R.Down)
 			{
 				if (!firing) //Enable firing to make the bullet fire immediately once pressed instead of released.
 				{			 //Whilst it is firing you cannot fire until the firing process is complete
@@ -170,12 +151,15 @@ namespace FlappyBird
 			if (data.AnalogRightX > 0.2f || data.AnalogRightX < -0.2f || data.AnalogRightY > 0.2f || data.AnalogRightY < -0.2f) 
 			{
 				var angleInRadians = FMath.Atan2 (-data.AnalogRightX, -data.AnalogRightY);
+				var angleInRadians2 = FMath.Atan2 (-data.AnalogLeftX, -data.AnalogLeftY);
 				playerRotation = new Vector2 (FMath.Cos (angleInRadians), FMath.Sin (angleInRadians));
+				playerMovement = new Vector2 (FMath.Cos (angleInRadians2), FMath.Sin (angleInRadians2));
 			} 
 			else if (data.AnalogLeftX > 0.2f || data.AnalogLeftX < -0.2f || data.AnalogLeftY > 0.2f || data.AnalogLeftY < -0.2f) 
 			{
 				var angleInRadians = FMath.Atan2 (-data.AnalogLeftX, -data.AnalogLeftY);
 				playerRotation = new Vector2 (FMath.Cos (angleInRadians), FMath.Sin (angleInRadians));
+				playerMovement = playerRotation;
 			} 
 			else if(analogX != 0.0f || analogY != 0.0f)
 			{
@@ -184,10 +168,15 @@ namespace FlappyBird
 			}
 						
 			//North, east, south, west are changed via the d-pad and playerrotation via the sticks
-			player.Update(North, East, South, West, playerRotation, gameScene);
+			if (Input2.GamePad0.AnalogLeft.Length() > 0.1f)
+			{
+				player.UpdateUsingANALOG(playerMovement, playerRotation, gameScene);
+			}
+			else
+				player.UpdateUsingDPAD(analogX, analogY, playerRotation, gameScene);
 						
 			//Move the bullet if its being fired, if not do nothing
-			bullet.Update();
+			bullet.Update(firing);
 						
 			enemy.Update(enemy, player, gameScene);
 			
@@ -212,6 +201,7 @@ namespace FlappyBird
 					{
 						scoreLabel.Text = "1";
 						enemy.Alive = false; 
+						firing = false;
 					}
 				}
 			}
