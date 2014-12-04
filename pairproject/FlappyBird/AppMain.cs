@@ -16,7 +16,7 @@ namespace FlappyBird
 	{
 		private static Sce.PlayStation.HighLevel.GameEngine2D.Scene 	gameScene;
 		private static Sce.PlayStation.HighLevel.UI.Scene 				uiScene;
-		private static Sce.PlayStation.HighLevel.UI.Label				scoreLabel;
+		private static Sce.PlayStation.HighLevel.UI.Label				hudLabel, timerLabel, gunLabel;
 		
 		private static bool 		firing = false, quitGame = false;
 		private static Bullet		bullet;
@@ -25,7 +25,9 @@ namespace FlappyBird
 		private static Enemy		enemy;
 		private static float 		analogX, analogY;
 		private static Vector2 		playerRotation = new Vector2((0.0f),(0.0f)), playerMovement = new Vector2((0.0f),(0.0f)); 
-				
+		private static int			score = 0, lives = 3, level = 1, bulletsLeft = 8, time = 0;
+		private static Timer		seconds;
+			
 		public static void Main (string[] args)
 		{
 			Initialize();
@@ -42,6 +44,7 @@ namespace FlappyBird
 				
 				Director.Instance.GL.Context.SwapBuffers();
 				Director.Instance.PostSwap();
+				
 			}
 			
 			//Clean up after ourselves.
@@ -55,6 +58,7 @@ namespace FlappyBird
 			bullet.Dispose();
 			
 			Director.Terminate ();
+			
 		}
 
 		public static void Initialize ()
@@ -72,14 +76,35 @@ namespace FlappyBird
 			Panel panel  = new Panel();
 			panel.Width  = Director.Instance.GL.Context.GetViewport().Width;
 			panel.Height = Director.Instance.GL.Context.GetViewport().Height;
-			scoreLabel = new Sce.PlayStation.HighLevel.UI.Label();
-			scoreLabel.HorizontalAlignment = HorizontalAlignment.Center;
-			scoreLabel.VerticalAlignment = VerticalAlignment.Top;
-			scoreLabel.Width = panel.Width;
-			scoreLabel.SetPosition(0,Director.Instance.GL.Context.GetViewport().Height*0.1f - scoreLabel.Height/2);
-			scoreLabel.TextTrimming = TextTrimming.None;
-			scoreLabel.Text = "WATCH OUT FOR THE ZOMBIE!";
-			panel.AddChildLast(scoreLabel);
+			
+			//Setup the HUD label (score, lives, level)
+			hudLabel = new Sce.PlayStation.HighLevel.UI.Label();
+			hudLabel.HorizontalAlignment = HorizontalAlignment.Left;
+			hudLabel.VerticalAlignment = VerticalAlignment.Top;
+			hudLabel.Width = panel.Width;
+			hudLabel.SetPosition(0,0);
+			//hudLabel.TextTrimming = TextTrimming.None;
+			hudLabel.Text = "Score: " + score + " 		Lives: " + lives + " 		Level: " + level;
+			panel.AddChildLast(hudLabel);
+			
+			//Setup the Time label (time)
+			timerLabel = new Sce.PlayStation.HighLevel.UI.Label();
+			timerLabel.HorizontalAlignment = HorizontalAlignment.Right;
+			timerLabel.VerticalAlignment = VerticalAlignment.Top;
+			timerLabel.Width = panel.Width;
+			timerLabel.SetPosition(0,0);
+			timerLabel.Text = "Time Survived: 0 secs";
+			panel.AddChildLast(timerLabel);
+			
+			//Setup the Gun label (time)
+			gunLabel = new Sce.PlayStation.HighLevel.UI.Label();
+			gunLabel.HorizontalAlignment = HorizontalAlignment.Center;
+			gunLabel.VerticalAlignment = VerticalAlignment.Bottom;
+			gunLabel.Width = panel.Width;
+			gunLabel.SetPosition(0,0);
+			gunLabel.Text = "Bullets Left: " + bulletsLeft;
+			panel.AddChildLast(gunLabel);
+			
 			uiScene.RootWidget.AddChildLast(panel);
 			UISystem.SetScene(uiScene);
 			
@@ -95,8 +120,16 @@ namespace FlappyBird
 			//Create the bullet
 			bullet = new Bullet(gameScene);
 			
+			//Create the timer
+			seconds = new Timer();
+			
 			//Run the scene.
 			Director.Instance.RunWithScene(gameScene, true);
+		}
+		
+		public static void UpdateSeconds()
+		{
+			time++;
 		}
 		
 		
@@ -137,6 +170,7 @@ namespace FlappyBird
 				if (!firing) //Enable firing to make the bullet fire immediately once pressed instead of released.
 				{			 //Whilst it is firing you cannot fire until the firing process is complete
 					bullet.Fire(player.GetX(), player.GetY(), player.GetAngle());
+					bulletsLeft = bulletsLeft - 1;
 					firing = true;
 				}
 			}
@@ -175,7 +209,7 @@ namespace FlappyBird
 			else
 				player.UpdateUsingDPAD(analogX, analogY, playerRotation, gameScene);
 						
-			//Move the bullet if its being fired, if not do nothing
+			//Move the bullet if its being fired, if not nothing happens
 			bullet.Update(firing);
 						
 			enemy.Update(enemy, player, gameScene);
@@ -193,18 +227,22 @@ namespace FlappyBird
 				{
 					if (enemy.HasCollidedWithPlayer (player.Sprite) == true)
 					{
-						scoreLabel.Text = "1";
+						lives = lives - 1;
 						player.Alive = false; 
 					}
 					
 					if (enemy.HasCollidedWithBullet (bullet.Sprite) == true)
 					{
-						scoreLabel.Text = "1";
+						score = score + 1;
 						enemy.Alive = false; 
 						firing = false;
 					}
 				}
 			}
+			//Update the UI
+			hudLabel.Text = "Score: " + score + " 		Lives: " + lives + " 		Level: " + level;
+			timerLabel.Text = "Time Survived: " + (int)seconds.Seconds() + " secs";
+			gunLabel.Text = "Bullets Left: " + bulletsLeft;
 		}
 		
 	}
