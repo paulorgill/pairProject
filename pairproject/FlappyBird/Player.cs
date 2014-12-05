@@ -88,12 +88,12 @@ namespace FlappyBird
 //		}	
 		public void UpdateUsingANALOG(Vector2 playerMovement, Vector2 playerRotation, Scene scene)
 		{
-			rotationAngle = -(float)FMath.Atan2(playerRotation.X, playerRotation.Y);
-			sprite.Angle = rotationAngle-45.555f;
+			rotationAngle = -(float)FMath.Atan2(playerRotation.X, playerRotation.Y); //Math to find the angle
+			sprite.Angle = rotationAngle-45.555f; //-45 because of how the player sprite is loaded
 			
-			movementAngle = -(float)FMath.Atan2(playerMovement.X, playerMovement.Y);
-			movementVector = Vector2FromAngle(movementAngle-91.1f,true);
-			
+			movementAngle = -(float)FMath.Atan2(playerMovement.X, playerMovement.Y); //Has to be different to rotation
+			movementVector = Vector2FromAngle(movementAngle-91.1f,true);			 //since player can move and rotate
+			//Move the sprite along the movement vector								 //at once.
 			sprite.Position = new Vector2(sprite.Position.X+(movementVector.X*speed), sprite.Position.Y+(movementVector.Y*speed));
 			
 			if (Alive == false )
@@ -107,7 +107,7 @@ namespace FlappyBird
 		public void UpdateUsingDPAD(float playerDirectionX, float playerDirectionY, Vector2 playerRotation, Scene scene)
 		{
 			rotationAngle = -(float)FMath.Atan2(playerRotation.X, playerRotation.Y);
-			sprite.Angle = rotationAngle-45.555f;
+			sprite.Angle = rotationAngle-45.555f; //Same as before
 						
 			if (playerDirectionY == -1.0f) //North
 			{

@@ -11,13 +11,13 @@ namespace FlappyBird
 	public class Enemy
 	{
 		
-		private static SpriteUV 	enemySprite;
-		private static TextureInfo	textureInfoUp;
-		private static TextureInfo	textureInfoDown;
-		private static TextureInfo	textureInfoRight;
-		private static TextureInfo	textureInfoLeft;
-		private static bool			enemyAlive;
-		private static float 		enemySpeed = 0.5f;
+		private SpriteUV 	enemySprite;
+		private TextureInfo	textureInfoUp;
+		private TextureInfo	textureInfoDown;
+		private TextureInfo	textureInfoRight;
+		private TextureInfo	textureInfoLeft;
+		private bool			enemyAlive;
+		private float 		enemySpeed = 0.5f;
 		private float width;
 		private float height;
 		
@@ -25,7 +25,7 @@ namespace FlappyBird
 		
 		
 		
-		public Enemy ( Player player ,Scene scene)
+		public Enemy (float startX, float startY, Player player ,Scene scene)
 		{
 			textureInfoUp  = new TextureInfo("/Application/textures/zombie.png");
 			textureInfoDown  = new TextureInfo("/Application/textures/zombiedown.png");
@@ -43,7 +43,7 @@ namespace FlappyBird
 			height = b.Point01.Y;
 			
 			// set enemy position
-			enemySprite.Position = new Vector2 (50.0f,200.0f);
+			enemySprite.Position = new Vector2 (startX, startY);
 			enemySprite.CenterSprite(new Vector2(0.5f,0.5f));
 
 			//Add to the current scene.
@@ -56,9 +56,9 @@ namespace FlappyBird
 		}
 	
 		
-		public void Update(Enemy enemy,Player player, Scene scene )	
+		public void Update(Player player, Scene scene )	
 		{
-			if (enemy.Alive == true)
+			if (Alive == true)
 				{
 			
 					if (player.Alive == true)
@@ -96,9 +96,10 @@ namespace FlappyBird
 			{
 				//scene.AddChild(sprite);
 				scene.RemoveChild(enemySprite,false );
-				Enemy.enemyAlive = false;
+				enemyAlive = false;
 			}
 		}
+		
 		
 	
 			public bool HasCollidedWithPlayer(SpriteUV sprite)

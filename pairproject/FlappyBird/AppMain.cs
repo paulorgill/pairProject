@@ -22,10 +22,10 @@ namespace FlappyBird
 		private static Bullet		bullet;
 		private static Player		player;
 		private static Background	background;
-		private static Enemy		enemy;
+		private static List<Enemy>  enemies;
 		private static float 		analogX, analogY;
 		private static Vector2 		playerRotation = new Vector2((0.0f),(0.0f)), playerMovement = new Vector2((0.0f),(0.0f)); 
-		private static int			score = 0, lives = 3, level = 1, bulletsLeft = 8, time = 0;
+		private static int			score = 0, lives = 3, level = 1, bulletsLeft = 8;
 		private static Timer		seconds;
 			
 		public static void Main (string[] args)
@@ -33,7 +33,6 @@ namespace FlappyBird
 			Initialize();
 			
 			//Game loop
-			//bool quitGame = false;
 			while (!quitGame) 
 			{
 				Update ();
@@ -44,21 +43,19 @@ namespace FlappyBird
 				
 				Director.Instance.GL.Context.SwapBuffers();
 				Director.Instance.PostSwap();
-				
 			}
 			
 			//Clean up after ourselves.
 			player.Dispose();
-			//foreach(Obstacle obstacle in obstacles)
-				//obstacle.Dispose();
+						
 			background.Dispose();
 			
-			enemy.Dispose();
+			foreach(Enemy enemys in enemies)
+				enemys.Dispose();
 			
 			bullet.Dispose();
 			
 			Director.Terminate ();
-			
 		}
 
 		public static void Initialize ()
@@ -105,6 +102,7 @@ namespace FlappyBird
 			gunLabel.Text = "Bullets Left: " + bulletsLeft;
 			panel.AddChildLast(gunLabel);
 			
+			//Add the panel to the UISystem
 			uiScene.RootWidget.AddChildLast(panel);
 			UISystem.SetScene(uiScene);
 			
@@ -114,9 +112,11 @@ namespace FlappyBird
 			//Create the player
 			player = new Player(gameScene);
 			
-			//Create the enemy
-			enemy = new Enemy( player, gameScene);
-			
+			//Create the enemy list and spawn one at (0,0)
+			enemies = new List<Enemy>();
+			Enemy enemy = new Enemy(0.0f, 0.0f, player, gameScene);
+			enemies.Add(enemy);
+					
 			//Create the bullet
 			bullet = new Bullet(gameScene);
 			
@@ -126,12 +126,6 @@ namespace FlappyBird
 			//Run the scene.
 			Director.Instance.RunWithScene(gameScene, true);
 		}
-		
-		public static void UpdateSeconds()
-		{
-			time++;
-		}
-		
 		
 		public static void Update()
 		{
@@ -164,6 +158,26 @@ namespace FlappyBird
 			if (Input2.GamePad0.Down.Down)
 				analogY = 1.0f;
 			
+			if (Input2.GamePad0.Square.Down) //Spawn enemies ('A' on keyboard)
+			{
+				if (enemies.Count < 10) //Max number of enemies
+				{
+					Random r = new Random();
+					bool spawn = false; //If random coords are near the player pick another set
+					while(spawn == false)
+					{
+						float tempX = r.Next(1,500); //Random coords between 1 and 500
+						float tempY = r.Next(1,500);
+						Vector2 spawnPoint = new Vector2(tempX,tempY);
+						if(Vector2.Distance(player.GetPos(), spawnPoint) > 50) // Can't spawn on the player
+						{
+							Enemy enemy = new Enemy(spawnPoint.X, spawnPoint.Y, player, gameScene);
+							enemies.Add(enemy); //Spawn enemy at random coords
+							spawn = true; //Exit the loop
+						}
+					}
+				}
+			}
 			
 			if (Input2.GamePad0.R.Down)
 			{
@@ -211,34 +225,43 @@ namespace FlappyBird
 						
 			//Move the bullet if its being fired, if not nothing happens
 			bullet.Update(firing);
-						
-			enemy.Update(enemy, player, gameScene);
 			
-			if (player.Alive == true)
-			{	//Constantly focus the camera on the players coordinates
+			//Update all enemies in the list
+			for (int i = enemies.Count - 1; i >= 0; i--) 
+			{
+				enemies[i].Update(player, gameScene);
+			}
+			
+			if (player.Alive == true) //Constantly focus the camera on the players coordinates
+			{	
 				gameScene.Camera2D.SetViewY(new Vector2(0.0f,Director.Instance.GL.Context.GetViewport().Height*0.5f), player.GetPos());
 			}
 			
 			if(player.Alive)
 			{
-				//Move the background.
-				//background.Update(0.0f);
-				if (enemy.Alive )
+				for (int i = enemies.Count - 1; i >= 0; i--) 
 				{
-					if (enemy.HasCollidedWithPlayer (player.Sprite) == true)
+					if (enemies[i].Alive ) //Check all enemies for collisions with player or bullet
 					{
-						lives = lives - 1;
-						player.Alive = false; 
-					}
-					
-					if (enemy.HasCollidedWithBullet (bullet.Sprite) == true)
-					{
-						score = score + 1;
-						enemy.Alive = false; 
-						firing = false;
+						if (enemies[i].HasCollidedWithPlayer (player.Sprite) == true)
+						{
+							lives = lives - 1;
+							player.Alive = false; 
+						}
+						
+						if (enemies[i].HasCollidedWithBullet (bullet.Sprite) == true)
+						{
+							score = score + 1;
+							enemies[i].Alive = false; //Remove the enemy from the scene 
+							enemies[i].Update(player, gameScene);
+							enemies.RemoveAt(i); //Remove the enemy from the list
+							bullet.ResetBullet(-500,-500);
+							firing = false;
+						}
 					}
 				}
 			}
+			
 			//Update the UI
 			hudLabel.Text = "Score: " + score + " 		Lives: " + lives + " 		Level: " + level;
 			timerLabel.Text = "Time Survived: " + (int)seconds.Seconds() + " secs";

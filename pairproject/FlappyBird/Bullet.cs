@@ -13,7 +13,6 @@ namespace FlappyBird
 		public Texture2D texture;
 		private static SpriteUV 	sprite;
 		private static TextureInfo	textureInfo;
-		private static float 		angle = 0.0f;
 		private Vector2 direction, origin;
 		public bool isVisible;
 		float speed=10.0f;
@@ -36,17 +35,17 @@ namespace FlappyBird
 			textureInfo.Dispose();
 		}
 		
-		public void ResetBullet(float x, float y)
+		public void ResetBullet(float x, float y) //Resets the bullet to the entered coords
 		{
 			sprite.Position = new Vector2(x, y);
 			sprite.Visible = false;
 		}
 		
-		public void Fire(float x, float y, float angle)
-		{
-			ResetBullet(x,y);
-			sprite.Visible = true;
-			origin = new Vector2(x,y);
+		public void Fire(float x, float y, float angle) //Resets the bullet to the players gun.
+		{												//Works out the vector from the angle of the player.
+			ResetBullet(x,y);							//Sets the bullet direction to that vector (update method moves it)
+			sprite.Visible = true;						//Rotates the bullet to the appropiate angle.
+			origin = new Vector2(x,y);		
 			direction = Vector2FromAngle(angle-45.55f,true);
 			//sprite.RotateTo(direction);
 			sprite.RotationNormalize = direction;
@@ -55,7 +54,7 @@ namespace FlappyBird
 		public static Vector2 Vector2FromAngle(float angle, bool normalize = true)
 		{
 		    Vector2 vector = new Vector2((float)FMath.Cos(angle), (float)FMath.Sin(angle));
-		    if (vector != Vector2.Zero && normalize)
+		    if (vector != Vector2.Zero && normalize) //Basic math to find out the vector from the angle
 		        vector.Normalize();
 		    return vector;
 		}
@@ -71,10 +70,10 @@ namespace FlappyBird
 		
 		public void Update(bool firing)
 		{
-			if (firing)
+			if (firing) //Move the bullet along the vector determined in the fire method
 			{
 				sprite.Position = new Vector2(sprite.Position.X+direction.X*speed, sprite.Position.Y+direction.Y*speed);
-				if(Vector2.Distance(sprite.Position,origin) > 300)
+				if(Vector2.Distance(sprite.Position,origin) > 300) //If its travelled 300 squares reset it
 				{
 					ResetBullet(-500, -500);
 				}
