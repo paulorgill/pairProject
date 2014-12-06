@@ -2,10 +2,10 @@
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.Workbench ActiveDocument="FlappyBird\AppMain.cs">
     <Files>
-      <File FileName="FlappyBird\AppMain.cs" Line="236" Column="42" />
+      <File FileName="FlappyBird\AppMain.cs" Line="240" Column="40" />
       <File FileName="FlappyBird\Player.cs" Line="23" Column="3" />
-      <File FileName="FlappyBird\Enemy.cs" Line="95" Column="24" />
-      <File FileName="FlappyBird\Bullet.cs" Line="71" Column="33" />
+      <File FileName="FlappyBird\Enemy.cs" Line="116" Column="4" />
+      <File FileName="FlappyBird\Bullet.cs" Line="51" Column="41" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

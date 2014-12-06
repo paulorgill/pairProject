@@ -17,14 +17,14 @@ namespace FlappyBird
 	{
 		private static Sce.PlayStation.HighLevel.GameEngine2D.Scene 	gameScene;
 		private static Sce.PlayStation.HighLevel.UI.Scene 				uiScene;
-		private static Sce.PlayStation.HighLevel.UI.Label				hudLabel, timerLabel, gunLabel;
+		private static Sce.PlayStation.HighLevel.UI.Label				hudLabel, timerLabel, gunLabel, reloadLabel;
 		
-		private static bool 		quitGame = false;
+		private static bool 		reloading = false, quitGame = false;
 		private static List<Enemy>  enemies;
 		private static List<Bullet> bullets;
 		private static Player		player;
 		private static Background	background;
-		private static float 		analogX, analogY, timeStamp, timeBetweenShots = 0.3f;
+		private static float 		analogX, analogY, timeStamp, timeBetweenShots = 0.3f, reloadTime = 4.0f;
 		private static Vector2 		playerRotation = new Vector2((0.0f),(0.0f)), playerMovement = new Vector2((0.0f),(0.0f)); 
 		private static int			score = 0, lives = 3, level = 1, bulletsLeft = 16;
 		private static Timer		seconds;
@@ -103,6 +103,16 @@ namespace FlappyBird
 			gunLabel.SetPosition(0,0);
 			gunLabel.Text = "Bullets Left: " + bulletsLeft;
 			panel.AddChildLast(gunLabel);
+			
+			//Setup the reload label (instructs user to reload)
+			reloadLabel = new Sce.PlayStation.HighLevel.UI.Label();
+			reloadLabel.HorizontalAlignment = HorizontalAlignment.Center;
+			reloadLabel.VerticalAlignment = VerticalAlignment.Middle;
+			reloadLabel.Width = panel.Width;
+			reloadLabel.SetPosition(Director.Instance.GL.Context.GetViewport().Width/35, Director.Instance.GL.Context.GetViewport().Height/2.5f);
+			reloadLabel.Text = "Press X to reload!";
+			reloadLabel.Visible = false;
+			panel.AddChildLast(reloadLabel);
 			
 			//Add the panel to the UISystem
 			uiScene.RootWidget.AddChildLast(panel);
@@ -185,19 +195,49 @@ namespace FlappyBird
 			
 			if (Input2.GamePad0.R.Down)
 			{
-				if (seconds.Seconds() >= timeStamp) //For automatic firing the fire rate is set by ensuring that
-				{									//the time difference between the previous shot and this is equal					
-					Bullet bullet = new Bullet(gameScene); //to the hard coded fire rate.
-					bullet.Fire(player.GetX(), player.GetY(), player.GetAngle());
-					bullets.Add(bullet);
-					bulletsLeft = bulletsLeft - 1;
-					timeStamp = (float)seconds.Seconds() + timeBetweenShots;
+				if(bulletsLeft>0)
+				{
+					if (seconds.Seconds() >= timeStamp) //For automatic firing the fire rate is set by ensuring that
+					{									//the time difference between the previous shot and this is equal					
+						Bullet bullet = new Bullet(gameScene); //to the hard coded fire rate.
+						bullet.Fire(player.GetX(), player.GetY(), player.GetAngle());
+						bullets.Add(bullet);
+						bulletsLeft = bulletsLeft - 1;
+						timeStamp = (float)seconds.Seconds() + timeBetweenShots; //Set the time for next shot
+					}
+				}
+				else
+				{
+					reloadLabel.Text = "Press X to reload!";
+					reloadLabel.Visible = true;
+				}
+			}
+			
+			if (Input2.GamePad0.Cross.Down) //Reload button
+			{
+				if(bulletsLeft==0)
+				{
+					reloadLabel.Text = "Reloading...";
+					reloadLabel.Visible = true;
+					reloading = true;
+					timeStamp = (float)seconds.Seconds() + reloadTime; //Set the time for when reload is done
+				}
+			}
+			
+			if (reloading)
+			{
+				if (seconds.Seconds() >= timeStamp) //When elapsed time reaches the set reload finish time
+				{
+					reloadLabel.Text = "Press X to reload!";
+					reloadLabel.Visible = false;
+					reloading = false;
+					bulletsLeft = 16; //Reload magazine
 				}
 			}
 		
-			//rotate according to the right analog stick, or if it's not moving, then according the the left stick
-			//so basically if you are not pointing the player in any direction with the right stick he is going to point in the walking direction
-			//or if both sticks are not moving,then use the analogX and analogY values(d-pad movement)
+			//Rotate according to the right analog stick, or if it's not moving, then according the the left stick.
+			//So basically if you are not pointing the player in any direction with the right stick he is going to point in the walking direction
+			//or if both sticks are not moving, then use the analogX and analogY values(D-PAD movement)
 			if (data.AnalogRightX > 0.2f || data.AnalogRightX < -0.2f || data.AnalogRightY > 0.2f || data.AnalogRightY < -0.2f) 
 			{
 				var angleInRadians = FMath.Atan2 (-data.AnalogRightX, -data.AnalogRightY);
