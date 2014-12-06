@@ -17,7 +17,7 @@ namespace FlappyBird
 		private TextureInfo	textureInfoRight;
 		private TextureInfo	textureInfoLeft;
 		private bool			enemyAlive;
-		private float 		enemySpeed = 0.5f;
+		private float 		enemySpeed = 0.7f;
 		private float width;
 		private float height;
 		

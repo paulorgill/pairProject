@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 using Sce.PlayStation.Core;
 using Sce.PlayStation.Core.Environment;
@@ -18,16 +19,16 @@ namespace FlappyBird
 		private static Sce.PlayStation.HighLevel.UI.Scene 				uiScene;
 		private static Sce.PlayStation.HighLevel.UI.Label				hudLabel, timerLabel, gunLabel;
 		
-		private static bool 		firing = false, quitGame = false;
-		private static Bullet		bullet;
+		private static bool 		quitGame = false;
+		private static List<Enemy>  enemies;
+		private static List<Bullet> bullets;
 		private static Player		player;
 		private static Background	background;
-		private static List<Enemy>  enemies;
-		private static float 		analogX, analogY;
+		private static float 		analogX, analogY, timeStamp, timeBetweenShots = 0.3f;
 		private static Vector2 		playerRotation = new Vector2((0.0f),(0.0f)), playerMovement = new Vector2((0.0f),(0.0f)); 
-		private static int			score = 0, lives = 3, level = 1, bulletsLeft = 8;
+		private static int			score = 0, lives = 3, level = 1, bulletsLeft = 16;
 		private static Timer		seconds;
-			
+							
 		public static void Main (string[] args)
 		{
 			Initialize();
@@ -53,7 +54,8 @@ namespace FlappyBird
 			foreach(Enemy enemys in enemies)
 				enemys.Dispose();
 			
-			bullet.Dispose();
+			foreach(Bullet bullet in bullets)
+				bullet.Dispose();
 			
 			Director.Terminate ();
 		}
@@ -118,11 +120,13 @@ namespace FlappyBird
 			enemies.Add(enemy);
 					
 			//Create the bullet
-			bullet = new Bullet(gameScene);
-			
+			bullets = new List<Bullet>();
+			Bullet bullet = new Bullet(gameScene);
+			bullets.Add(bullet);
+				
 			//Create the timer
 			seconds = new Timer();
-			
+				
 			//Run the scene.
 			Director.Instance.RunWithScene(gameScene, true);
 		}
@@ -160,16 +164,16 @@ namespace FlappyBird
 			
 			if (Input2.GamePad0.Square.Down) //Spawn enemies ('A' on keyboard)
 			{
-				if (enemies.Count < 10) //Max number of enemies
+				if (enemies.Count < 15) //Max number of enemies
 				{
 					Random r = new Random();
 					bool spawn = false; //If random coords are near the player pick another set
 					while(spawn == false)
 					{
-						float tempX = r.Next(1,500); //Random coords between 1 and 500
-						float tempY = r.Next(1,500);
+						float tempX = r.Next(1,1500); //Random coords between 1 and 1500
+						float tempY = r.Next(1,1500);
 						Vector2 spawnPoint = new Vector2(tempX,tempY);
-						if(Vector2.Distance(player.GetPos(), spawnPoint) > 50) // Can't spawn on the player
+						if(Vector2.Distance(player.GetPos(), spawnPoint) > 200) // Can't spawn on the player
 						{
 							Enemy enemy = new Enemy(spawnPoint.X, spawnPoint.Y, player, gameScene);
 							enemies.Add(enemy); //Spawn enemy at random coords
@@ -181,18 +185,16 @@ namespace FlappyBird
 			
 			if (Input2.GamePad0.R.Down)
 			{
-				if (!firing) //Enable firing to make the bullet fire immediately once pressed instead of released.
-				{			 //Whilst it is firing you cannot fire until the firing process is complete
+				if (seconds.Seconds() >= timeStamp) //For automatic firing the fire rate is set by ensuring that
+				{									//the time difference between the previous shot and this is equal					
+					Bullet bullet = new Bullet(gameScene); //to the hard coded fire rate.
 					bullet.Fire(player.GetX(), player.GetY(), player.GetAngle());
+					bullets.Add(bullet);
 					bulletsLeft = bulletsLeft - 1;
-					firing = true;
+					timeStamp = (float)seconds.Seconds() + timeBetweenShots;
 				}
 			}
-			
-			Vector2 bulletPos = bullet.GetPos(); 			//Once the bullet has finished firing or hits something it
-			if(bulletPos.X == -500 && bulletPos.Y == -500)	//goes off-screen to (-500,-500) and the player can fire
-				firing = false;								//once again.
-			    			
+		
 			//rotate according to the right analog stick, or if it's not moving, then according the the left stick
 			//so basically if you are not pointing the player in any direction with the right stick he is going to point in the walking direction
 			//or if both sticks are not moving,then use the analogX and analogY values(d-pad movement)
@@ -224,7 +226,10 @@ namespace FlappyBird
 				player.UpdateUsingDPAD(analogX, analogY, playerRotation, gameScene);
 						
 			//Move the bullet if its being fired, if not nothing happens
-			bullet.Update(firing);
+			for (int i = bullets.Count - 1; i >= 0; i--) 
+			{
+				bullets[i].Update(gameScene);
+			}
 			
 			//Update all enemies in the list
 			for (int i = enemies.Count - 1; i >= 0; i--) 
@@ -248,20 +253,26 @@ namespace FlappyBird
 							lives = lives - 1;
 							player.Alive = false; 
 						}
-						
-						if (enemies[i].HasCollidedWithBullet (bullet.Sprite) == true)
+						for (int j = bullets.Count - 1; j >= 0; j--) 
 						{
-							score = score + 1;
-							enemies[i].Alive = false; //Remove the enemy from the scene 
-							enemies[i].Update(player, gameScene);
-							enemies.RemoveAt(i); //Remove the enemy from the list
-							bullet.ResetBullet(-500,-500);
-							firing = false;
+							if (enemies[i].HasCollidedWithBullet (bullets[j].Sprite) == true)
+							{
+								score = score + 1;
+								enemies[i].Alive = false; //Remove the enemy from the scene 
+								enemies[i].Update(player, gameScene);
+								enemies.RemoveAt(i); //Remove the enemy from the list
+								bullets[j].ResetBullet(-500,-500);
+							}
+							Vector2 bulletPosition = bullets[j].GetPos(); 			
+							if(bulletPosition.X == -500 && bulletPosition.Y == -500)
+							{
+								bullets.RemoveAt(j);
+							}
 						}
 					}
 				}
 			}
-			
+					
 			//Update the UI
 			hudLabel.Text = "Score: " + score + " 		Lives: " + lives + " 		Level: " + level;
 			timerLabel.Text = "Time Survived: " + (int)seconds.Seconds() + " secs";

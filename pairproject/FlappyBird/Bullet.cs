@@ -11,11 +11,11 @@ namespace FlappyBird
 	public class Bullet
 	{
 		public Texture2D texture;
-		private static SpriteUV 	sprite;
-		private static TextureInfo	textureInfo;
+		private SpriteUV 	sprite;
+		private TextureInfo	textureInfo;
 		private Vector2 direction, origin;
 		public bool isVisible;
-		float speed=10.0f;
+		float speed=12.0f;
 		
 		public Bullet(Scene scene)
 		{
@@ -68,18 +68,16 @@ namespace FlappyBird
 //            Visible = true;
 //        }
 		
-		public void Update(bool firing)
+		public void Update(Scene scene)
 		{
-			if (firing) //Move the bullet along the vector determined in the fire method
-			{
 				sprite.Position = new Vector2(sprite.Position.X+direction.X*speed, sprite.Position.Y+direction.Y*speed);
 				if(Vector2.Distance(sprite.Position,origin) > 300) //If its travelled 300 squares reset it
 				{
 					ResetBullet(-500, -500);
+					sprite.Visible = false;
+					scene.RemoveChild(sprite,false );
 				}
-			}
-			else
-				sprite.Visible = false;
+				
 			//sprite.Position = new Vector2(x+=speed, y);
 			//Vector2 direction = Rotate(angle);
 			//sprite.Position.X -= speed;
