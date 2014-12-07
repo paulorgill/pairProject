@@ -259,9 +259,7 @@ namespace FlappyBird
 						
 			//North, east, south, west are changed via the d-pad and playerrotation via the sticks
 			if (Input2.GamePad0.AnalogLeft.Length() > 0.1f)
-			{
 				player.UpdateUsingANALOG(playerMovement, playerRotation, gameScene);
-			}
 			else
 				player.UpdateUsingDPAD(analogX, analogY, playerRotation, gameScene);
 						
@@ -277,18 +275,55 @@ namespace FlappyBird
 				enemies[i].Update(player, gameScene);
 			}
 			
-			if (player.Alive == true) //Constantly focus the camera on the players coordinates
-			{	
-				gameScene.Camera2D.SetViewY(new Vector2(0.0f,Director.Instance.GL.Context.GetViewport().Height*0.5f), player.GetPos());
-			}
-			
-			if(player.Alive)
+			if(player.Alive) 
 			{
-				for (int i = enemies.Count - 1; i >= 0; i--) 
+				//Camera. Focus on player. Don't let the camera show any off map area. If the player walks near the edge
+				//leave the edge of the camera on the edge of the map but let the player walk to the actual map edge.
+				//If the player isn't within screenwidth/2 or screen height/2 of a edge of the map then center on the
+				//player.
+				if ((player.GetX() < Director.Instance.GL.Context.GetViewport().Width*0.5f) || (player.GetX() > 3000f - Director.Instance.GL.Context.GetViewport().Width*0.5f) ||
+				    (player.GetY() < Director.Instance.GL.Context.GetViewport().Height*0.5f) || (player.GetY() > 3000f - Director.Instance.GL.Context.GetViewport().Height*0.5f))
 				{
-					if (enemies[i].Alive ) //Check all enemies for collisions with player or bullet
+					if (player.GetX() < Director.Instance.GL.Context.GetViewport().Width*0.5f) //Near left side
+						gameScene.Camera2D.SetViewY(new Vector2(0.0f,Director.Instance.GL.Context.GetViewport().Height*0.5f), new Vector2(Director.Instance.GL.Context.GetViewport().Width*0.5f, player.GetY()));
+					if (player.GetX() > 3000f - Director.Instance.GL.Context.GetViewport().Width*0.5f) //Near right side
+						gameScene.Camera2D.SetViewY(new Vector2(0.0f,Director.Instance.GL.Context.GetViewport().Height*0.5f), new Vector2(3000f - Director.Instance.GL.Context.GetViewport().Width*0.5f, player.GetY()));
+					if (player.GetY() < Director.Instance.GL.Context.GetViewport().Height*0.5f) //Near bottom side
+						gameScene.Camera2D.SetViewY(new Vector2(0.0f,Director.Instance.GL.Context.GetViewport().Height*0.5f), new Vector2(player.GetX(), Director.Instance.GL.Context.GetViewport().Height*0.5f));
+					if (player.GetY() > 3000.0f - Director.Instance.GL.Context.GetViewport().Height*0.5f) //Near top side
+						gameScene.Camera2D.SetViewY(new Vector2(0.0f,Director.Instance.GL.Context.GetViewport().Height*0.5f), 
+						                            new Vector2(player.GetX(), 3000.0f - Director.Instance.GL.Context.GetViewport().Height*0.5f));
+					if ((player.GetX() < Director.Instance.GL.Context.GetViewport().Width*0.5f) && (player.GetY() < Director.Instance.GL.Context.GetViewport().Height*0.5f)) //Near bottom left corner
+						gameScene.Camera2D.SetViewY(new Vector2(0.0f,Director.Instance.GL.Context.GetViewport().Height*0.5f),
+						                            new Vector2(Director.Instance.GL.Context.GetViewport().Width*0.5f, Director.Instance.GL.Context.GetViewport().Height*0.5f));
+					if ((player.GetX() < Director.Instance.GL.Context.GetViewport().Width*0.5f) && (player.GetY() > 3000.0f - Director.Instance.GL.Context.GetViewport().Height*0.5f)) //Near top left corner
+						gameScene.Camera2D.SetViewY(new Vector2(0.0f,Director.Instance.GL.Context.GetViewport().Height*0.5f),
+						                            new Vector2(Director.Instance.GL.Context.GetViewport().Width*0.5f, 3000.0f - Director.Instance.GL.Context.GetViewport().Height*0.5f));
+					if ((player.GetX() > 3000.0f - Director.Instance.GL.Context.GetViewport().Width*0.5f) && (player.GetY() > 3000.0f - Director.Instance.GL.Context.GetViewport().Height*0.5f)) //Near top right corner
+						gameScene.Camera2D.SetViewY(new Vector2(0.0f,Director.Instance.GL.Context.GetViewport().Height*0.5f),
+						                            new Vector2(3000.0f - Director.Instance.GL.Context.GetViewport().Width*0.5f, 3000.0f - Director.Instance.GL.Context.GetViewport().Height*0.5f));
+					if ((player.GetX() > 3000.0f -  Director.Instance.GL.Context.GetViewport().Width*0.5f) && (player.GetY() < Director.Instance.GL.Context.GetViewport().Height*0.5f)) //Near bottom right corner
+						gameScene.Camera2D.SetViewY(new Vector2(0.0f,Director.Instance.GL.Context.GetViewport().Height*0.5f),
+						                            new Vector2(Director.Instance.GL.Context.GetViewport().Width*0.5f, Director.Instance.GL.Context.GetViewport().Height*0.5f));
+				}
+				else
+					gameScene.Camera2D.SetViewY(new Vector2(0.0f,Director.Instance.GL.Context.GetViewport().Height*0.5f), player.GetPos()); //Player not near an edge
+					
+				//Create map boundaries
+				if (player.GetX() < 0.0f) //Left side boundary
+					player.SetPlayer(0.0f, player.GetY());
+				if (player.GetX() > 3000.0f) //Right side boundary
+					player.SetPlayer(3000.0f, player.GetY());
+				if (player.GetY() < 0.0f) //Bottom side boundary
+					player.SetPlayer(player.GetX(), 0.0f);
+				if (player.GetY() > 3000.0f) //Top side boundary
+					player.SetPlayer(player.GetX(), 3000.0f);
+					
+				for (int i = enemies.Count - 1; i >= 0; i--) //Check all enemies for collisions with player or bullet
+				{
+					if (enemies[i].Alive ) 
 					{
-						if (enemies[i].HasCollidedWithPlayer (player.Sprite) == true)
+						if (enemies[i].HasCollidedWithPlayer (player.Sprite) == true) //Colision between player and enemies
 						{
 							lives = lives - 1;
 							player.Alive = false; 

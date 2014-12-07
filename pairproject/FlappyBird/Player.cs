@@ -104,6 +104,11 @@ namespace FlappyBird
 			}
 		}
 		
+		public void SetPlayer(float x, float y) //Sets the player to the entered coords
+		{
+			sprite.Position = new Vector2(x, y);
+		}
+		
 		public void UpdateUsingDPAD(float playerDirectionX, float playerDirectionY, Vector2 playerRotation, Scene scene)
 		{
 			rotationAngle = -(float)FMath.Atan2(playerRotation.X, playerRotation.Y);
