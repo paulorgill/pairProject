@@ -102,6 +102,12 @@ namespace FlappyBird
 				scene.RemoveChild(sprite,false );
 				Player.alive = false; 
 			}
+			
+			//else 
+			//{//
+			//	scene.AddChild(sprite)
+			//}
+			
 		}
 		
 		public void SetPlayer(float x, float y) //Sets the player to the entered coords
@@ -182,11 +188,17 @@ namespace FlappyBird
 			
 			if (Alive == false )
 			{
-				//scene.AddChild(sprite);
-				scene.RemoveChild(sprite,false );
+				
+				sprite.Position = new Vector2(100.0f, 100.0f);
+				//scene.RemoveChild(sprite,false );
 				Player.alive = false; 
+				sprite.Visible = false;
 			}
 			
+			if (Alive == true )
+			{
+				sprite.Visible = true;
+			}
 		}
 		
 		public Vector2 GetPos()

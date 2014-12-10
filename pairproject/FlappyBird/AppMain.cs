@@ -193,6 +193,14 @@ namespace FlappyBird
 				}
 			}
 			
+			if (Input2.GamePad0.Triangle.Down) //Respawnbutton
+			{
+				player.Alive = true;
+				
+			}
+			
+			
+			
 			if (Input2.GamePad0.R.Down)
 			{
 				if(bulletsLeft>0)
@@ -215,6 +223,7 @@ namespace FlappyBird
 			
 			if (Input2.GamePad0.Cross.Down) //Reload button
 			{
+				
 				if(bulletsLeft==0)
 				{
 					reloadLabel.Text = "Reloading...";
