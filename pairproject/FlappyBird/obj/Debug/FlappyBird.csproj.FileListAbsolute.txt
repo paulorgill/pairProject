@@ -409,3 +409,7 @@ C:\Users\paul\Desktop\githubtest\pairProject\pairproject\FlappyBird\bin\Debug\Fl
 C:\Users\paul\Desktop\githubtest\pairProject\pairproject\FlappyBird\bin\Debug\FlappyBird-unsigned\Application\textures\a1.png
 C:\Users\paul\Desktop\githubtest\pairProject\pairproject\FlappyBird\bin\Debug\FlappyBird-signed\Application\textures\floor50x50.png
 C:\Users\paul\Desktop\githubtest\pairProject\pairproject\FlappyBird\bin\Debug\FlappyBird-signed\Application\textures\a1.png
+C:\Users\paul\Desktop\githubtest\pairProject\pairproject\FlappyBird\bin\Debug\FlappyBird-unsigned\Application\textures\veggie_royale_title.png
+C:\Users\paul\Desktop\githubtest\pairProject\pairproject\FlappyBird\bin\Debug\FlappyBird-signed\Application\textures\veggie_royale_title.png
+C:\Users\paul\Desktop\githubtest\pairProject\pairproject\FlappyBird\bin\Debug\FlappyBird-unsigned\Application\textures\menuScreen.png
+C:\Users\paul\Desktop\githubtest\pairProject\pairproject\FlappyBird\bin\Debug\FlappyBird-signed\Application\textures\menuScreen.png

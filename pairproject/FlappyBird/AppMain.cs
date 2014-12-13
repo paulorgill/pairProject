@@ -24,10 +24,13 @@ namespace FlappyBird
 		private static List<Bullet> bullets;
 		private static Player		player;
 		private static Background	background;
+		private static Menu         menu;
 		private static float 		analogX, analogY, timeStamp, timeBetweenShots = 0.3f, reloadTime = 4.0f;
 		private static Vector2 		playerRotation = new Vector2((0.0f),(0.0f)), playerMovement = new Vector2((0.0f),(0.0f)); 
 		private static int			score = 0, lives = 3, level = 1, bulletsLeft = 16;
 		private static Timer		seconds;
+		private static bool ismenu = true;
+		private static bool isgame = false; 
 							
 		public static void Main (string[] args)
 		{
@@ -70,6 +73,8 @@ namespace FlappyBird
 			gameScene = new Sce.PlayStation.HighLevel.GameEngine2D.Scene();
 			gameScene.Camera.SetViewFromViewport();
 			
+			
+			
 			//Set the ui scene.
 			uiScene = new Sce.PlayStation.HighLevel.UI.Scene();
 			Panel panel  = new Panel();
@@ -84,6 +89,7 @@ namespace FlappyBird
 			hudLabel.SetPosition(0,0);
 			//hudLabel.TextTrimming = TextTrimming.None;
 			hudLabel.Text = "Score: " + score + " 		Lives: " + lives + " 		Level: " + level;
+			hudLabel.Visible = false; 
 			panel.AddChildLast(hudLabel);
 			
 			//Setup the Time label (time)
@@ -93,7 +99,11 @@ namespace FlappyBird
 			timerLabel.Width = panel.Width;
 			timerLabel.SetPosition(0,0);
 			timerLabel.Text = "Time Survived: 0 secs";
+			timerLabel.Visible = false;
 			panel.AddChildLast(timerLabel);
+			
+			
+			
 			
 			//Setup the Gun label (time)
 			gunLabel = new Sce.PlayStation.HighLevel.UI.Label();
@@ -102,6 +112,7 @@ namespace FlappyBird
 			gunLabel.Width = panel.Width;
 			gunLabel.SetPosition(0,0);
 			gunLabel.Text = "Bullets Left: " + bulletsLeft;
+			gunLabel.Visible = false; 
 			panel.AddChildLast(gunLabel);
 			
 			//Setup the reload label (instructs user to reload)
@@ -117,6 +128,8 @@ namespace FlappyBird
 			//Add the panel to the UISystem
 			uiScene.RootWidget.AddChildLast(panel);
 			UISystem.SetScene(uiScene);
+				
+			
 			
 			//Create the background.
 			background = new Background(gameScene);
@@ -136,6 +149,12 @@ namespace FlappyBird
 				
 			//Create the timer
 			seconds = new Timer();
+			
+			if (ismenu == true )
+			{
+				menu = new Menu(gameScene);
+			
+			}
 				
 			//Run the scene.
 			Director.Instance.RunWithScene(gameScene, true);
@@ -146,6 +165,29 @@ namespace FlappyBird
 			//Determine whether the player tapped the screen
 			var touches = Touch.GetData(0);
 			GamePadData data = GamePad.GetData(0);
+			
+			
+			if (ismenu == true)
+			{
+				if (touches.Count > 0 )
+				{
+					ismenu = false ;
+					isgame = true;	
+				}
+			}
+			
+			if (isgame == true)
+			{
+				
+				menu.Update(0.0f);
+				
+			//makes the UI visiable to the player
+				
+			timerLabel.Visible = true;
+			hudLabel.Visible = true; 
+			gunLabel.Visible = true;
+			
+			
 						
 			//Move the player using basic boolean logic
 			if (Input2.GamePad0.Up.Down)
@@ -362,6 +404,6 @@ namespace FlappyBird
 			timerLabel.Text = "Time Survived: " + (int)seconds.Seconds() + " secs";
 			gunLabel.Text = "Bullets Left: " + bulletsLeft;
 		}
-		
+		}
 	}
 }
