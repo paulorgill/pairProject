@@ -15,7 +15,7 @@ namespace FlappyBird
 		private static TextureInfo	textureInfo;
 			
 		private static bool			alive;
-		private static float 		speed = 3.0f;
+		private static float 		speed = 3.5f;
 		private static float 		rotationAngle = 0.0f, movementAngle = 0.0f;
 		private static Vector2 		movementVector;
 		

@@ -17,15 +17,13 @@ namespace FlappyBird
 		private TextureInfo	textureInfoRight;
 		private TextureInfo	textureInfoLeft;
 		private bool			enemyAlive;
-		private float 		enemySpeed = 0.7f;
+		private float 		enemySpeed;
 		private float width;
 		private float height;
 		
 		public bool Alive { get{return enemyAlive;} set{enemyAlive = value;} }
-		
-		
-		
-		public Enemy (float startX, float startY, Player player ,Scene scene)
+					
+		public Enemy (float startX, float startY, float speed, Player player ,Scene scene)
 		{
 			textureInfoUp  = new TextureInfo("/Application/textures/zombie.png");
 			textureInfoDown  = new TextureInfo("/Application/textures/zombiedown.png");
@@ -36,7 +34,7 @@ namespace FlappyBird
 						
 			enemySprite.Quad.S = textureInfoUp.TextureSizef;
 			enemyAlive = true;
-			
+			enemySpeed = speed/10;
 			// Get sprite bounds
 			Bounds2 b = enemySprite.Quad.Bounds2();
 			width = b.Point10.X;
