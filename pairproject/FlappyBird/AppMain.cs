@@ -25,24 +25,19 @@ namespace FlappyBird
 		private static Player		player;
 		private static Background	background;
 		private static Menu         menu;
-<<<<<<< HEAD
 		private static GameOver     gameOverScreen;
-		private static float 		analogX, analogY, timeStamp, timeBetweenShots = 0.3f, reloadTime = 4.0f;
-=======
+		//private static float 		analogX, analogY, timeStamp, timeBetweenShots = 0.3f, reloadTime = 4.0f;
 		private static float 		analogX, analogY, timeStamp, timeStamp2, timeBetweenShots = 0.3f, reloadTime = 3.0f;
->>>>>>> origin/master
 		private static Vector2 		playerRotation = new Vector2((0.0f),(0.0f)), playerMovement = new Vector2((0.0f),(0.0f)); 
 		private static int			score = 0, lives = 3, level = 1, bulletsLeft = 16, enemiesRemaining = 0;
 		private static Timer		seconds;
 		private static bool ismenu = true;
 		private static bool isgame = false; 
-<<<<<<< HEAD
 		private static bool inGameOver = false; 
-=======
 		private static bool newLevel = true; 
->>>>>>> origin/master
-							
+		
 		public static void Main (string[] args)
+			
 		{
 			Initialize();
 			
@@ -188,36 +183,33 @@ namespace FlappyBird
 			//Determine whether the player tapped the screen
 			var touches = Touch.GetData(0);
 			GamePadData data = GamePad.GetData(0);
-<<<<<<< HEAD
+
 			
 			
 			
 			// Starts the game once the player has tapped the screen
-=======
+
 						
->>>>>>> origin/master
 			if (ismenu == true)
 			{
 				if (touches.Count > 0 )
 				{
 					ismenu = false ;
 					isgame = true;	
-<<<<<<< HEAD
+
 					inGameOver = false;
-=======
+
 					seconds.Reset();	
->>>>>>> origin/master
+
 				}
 			}
 			
 			// Removes the menu from the screen
 			if (isgame == true)
 			{
-<<<<<<< HEAD
 			
 				
-=======
->>>>>>> origin/master
+
 				menu.Update(0.0f);
 					
 				//Makes the UI visiable to the player
@@ -254,7 +246,7 @@ namespace FlappyBird
 					}
 				}
 				
-<<<<<<< HEAD
+
 			timerLabel.Visible = true;
 			hudLabel.Visible = true; 
 			gunLabel.Visible = true;
@@ -294,7 +286,7 @@ namespace FlappyBird
 				
 			
 						
-=======
+
 				if (enemiesRemaining == level*5)
 					newLevel = false; //Stop spawning enemies
 													
@@ -305,7 +297,7 @@ namespace FlappyBird
 					background.NextMap(level); //New map texture
 				}
 								
->>>>>>> origin/master
+
 			//Move the player using basic boolean logic
 			if (Input2.GamePad0.Up.Down)
 				analogY = -1.0f;

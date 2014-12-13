@@ -421,3 +421,7 @@ C:\Users\Alex\Dropbox\University Year 2\TECHNICAL GAMES PRODUCTION\GitHub\pairPr
 C:\Users\Alex\Dropbox\University Year 2\TECHNICAL GAMES PRODUCTION\GitHub\pairProject\pairproject\FlappyBird\bin\Debug\FlappyBird-signed\Application\textures\a2.png
 C:\Users\Alex\Dropbox\University Year 2\TECHNICAL GAMES PRODUCTION\GitHub\pairProject\pairproject\FlappyBird\bin\Debug\FlappyBird-unsigned\Application\textures\a4.png
 C:\Users\Alex\Dropbox\University Year 2\TECHNICAL GAMES PRODUCTION\GitHub\pairProject\pairproject\FlappyBird\bin\Debug\FlappyBird-signed\Application\textures\a4.png
+C:\Users\paul\Desktop\githubtest\pairProject\pairproject\FlappyBird\bin\Debug\FlappyBird-unsigned\Application\textures\a2.png
+C:\Users\paul\Desktop\githubtest\pairProject\pairproject\FlappyBird\bin\Debug\FlappyBird-unsigned\Application\textures\a4.png
+C:\Users\paul\Desktop\githubtest\pairProject\pairproject\FlappyBird\bin\Debug\FlappyBird-signed\Application\textures\a2.png
+C:\Users\paul\Desktop\githubtest\pairProject\pairproject\FlappyBird\bin\Debug\FlappyBird-signed\Application\textures\a4.png
