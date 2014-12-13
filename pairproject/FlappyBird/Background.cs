@@ -12,7 +12,7 @@ namespace FlappyBird
 	{	
 		//Private variables.
 		private SpriteUV[,] 	sprites;
-		private TextureInfo	textureInfo, textureInfo2, textureInfo3;
+		private TextureInfo	textureInfo, textureInfo2, textureInfo3, textureInfo4, textureInfo5;
 		
 		//Public functions.
 		public Background (Scene scene)
@@ -21,7 +21,9 @@ namespace FlappyBird
 			
 			textureInfo  		= new TextureInfo("/Application/textures/a1.png");
 			textureInfo2  		= new TextureInfo("/Application/textures/a2.png");
-			textureInfo3  		= new TextureInfo("/Application/textures/a4.png");
+			textureInfo3  		= new TextureInfo("/Application/textures/a3.png");
+			textureInfo4  		= new TextureInfo("/Application/textures/a4.png");
+			textureInfo5  		= new TextureInfo("/Application/textures/a5.png");
 			
 			for (int i = 0; i < 3; ++i)
 			{
@@ -62,6 +64,26 @@ namespace FlappyBird
 	    			for (int j = 0; j < 3; ++j)
 					{
 						sprites[i,j].TextureInfo = textureInfo3;
+					}
+				}
+			}
+			else if (level == 4)
+			{
+				for (int i = 0; i < 3; ++i)
+				{
+	    			for (int j = 0; j < 3; ++j)
+					{
+						sprites[i,j].TextureInfo = textureInfo4;
+					}
+				}
+			}
+			else if (level == 5)
+			{
+				for (int i = 0; i < 3; ++i)
+				{
+	    			for (int j = 0; j < 3; ++j)
+					{
+						sprites[i,j].TextureInfo = textureInfo5;
 					}
 				}
 			}

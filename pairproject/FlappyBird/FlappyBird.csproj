@@ -54,6 +54,7 @@
     <Folder Include="shaders\" />
     <Folder Include="textures\" />
     <Folder Include="fonts\" />
+    <Folder Include="sounds\" />
   </ItemGroup>
   <ItemGroup>
     <ShaderProgram Include="shaders\Texture.fcg" />
@@ -69,10 +70,20 @@
     <Content Include="textures\bullet.png" />
     <Content Include="textures\playertest2.png" />
     <Content Include="textures\floor50x50.png" />
-    <Content Include="textures\a1.png" />
     <Content Include="textures\veggie_royale_title.png" />
     <Content Include="textures\menuScreen.png" />
+    <Content Include="sounds\shoot.wav" />
+    <Content Include="sounds\shoot2.wav" />
+    <Content Include="sounds\shoot3.mp3" />
+    <Content Include="sounds\bgm.wav" />
+    <Content Include="sounds\death.mp3" />
+    <Content Include="sounds\click.wav" />
+    <Content Include="sounds\nextlevel.wav" />
+    <Content Include="sounds\chaching.wav" />
+    <Content Include="textures\a1.png" />
     <Content Include="textures\a2.png" />
+    <Content Include="textures\a3.png" />
     <Content Include="textures\a4.png" />
+    <Content Include="textures\a5.png" />
   </ItemGroup>
 </Project>

@@ -6,6 +6,7 @@ using Sce.PlayStation.Core;
 using Sce.PlayStation.Core.Environment;
 using Sce.PlayStation.Core.Graphics;
 using Sce.PlayStation.Core.Input;
+using Sce.PlayStation.Core.Audio;
 
 using Sce.PlayStation.HighLevel.GameEngine2D;
 using Sce.PlayStation.HighLevel.GameEngine2D.Base;
@@ -19,25 +20,21 @@ namespace FlappyBird
 		private static Sce.PlayStation.HighLevel.UI.Scene 				uiScene;
 		private static Sce.PlayStation.HighLevel.UI.Label				hudLabel, timerLabel, gunLabel, reloadLabel, enemiesLabel;
 		
-		private static bool 		reloading = false, quitGame = false;
+		private static bool 		reloading = false, quitGame = false, nextLevelVoice = false, ismenu = true, isgame = false, inGameOver = false, newLevel = true;
 		private static List<Enemy>  enemies;
 		private static List<Bullet> bullets;
 		private static Player		player;
 		private static Background	background;
 		private static Menu         menu;
 		private static GameOver     gameOverScreen;
-		//private static float 		analogX, analogY, timeStamp, timeBetweenShots = 0.3f, reloadTime = 4.0f;
-		private static float 		analogX, analogY, timeStamp, timeStamp2, timeBetweenShots = 0.3f, reloadTime = 3.0f;
+		private static Sound		soundBullet, death, bgmusic, clickSound, nextLevelSound;
+		private static SoundPlayer 	bulletPlayer, deathPlayer, bgmusicPlayer, clickPlayer, nextLevelPlayer;
+		private static float 		analogX, analogY, timeStamp, timeStamp2, timeStamp3, timeBetweenShots = 0.2f, reloadTime = 3.0f;
 		private static Vector2 		playerRotation = new Vector2((0.0f),(0.0f)), playerMovement = new Vector2((0.0f),(0.0f)); 
-		private static int			score = 0, lives = 3, level = 1, bulletsLeft = 16, enemiesRemaining = 0;
+		private static int			score = 0, lives = 3, level = 1, bulletsLeft = 20, enemiesRemaining = 0;
 		private static Timer		seconds;
-		private static bool ismenu = true;
-		private static bool isgame = false; 
-		private static bool inGameOver = false; 
-		private static bool newLevel = true; 
-		
+	
 		public static void Main (string[] args)
-			
 		{
 			Initialize();
 			
@@ -77,8 +74,6 @@ namespace FlappyBird
 			//Set game scene
 			gameScene = new Sce.PlayStation.HighLevel.GameEngine2D.Scene();
 			gameScene.Camera.SetViewFromViewport();
-			
-			
 			
 			//Set the ui scene.
 			uiScene = new Sce.PlayStation.HighLevel.UI.Scene();
@@ -149,8 +144,7 @@ namespace FlappyBird
 			
 			//Create the enemy list and spawn one at (0,0)
 			enemies = new List<Enemy>();
-			
-					
+								
 			//Create the bullet
 			bullets = new List<Bullet>();
 			Bullet bullet = new Bullet(gameScene);
@@ -159,22 +153,30 @@ namespace FlappyBird
 			//Create the timer
 			seconds = new Timer();
 			
+			//Create sounds and their respective soundplayers
+			soundBullet = new Sound("/Application/sounds/shoot2.wav");
+			bulletPlayer = soundBullet.CreatePlayer();
+			bgmusic = new Sound("/Application/sounds/bgm.wav");
+			bgmusicPlayer = bgmusic.CreatePlayer();
+			clickSound = new Sound("/Application/sounds/click.wav");
+			clickPlayer = clickSound.CreatePlayer();
+			nextLevelSound = new Sound("/Application/sounds/chaching.wav");
+			nextLevelPlayer = nextLevelSound.CreatePlayer();
+			
 			//Create menu screen
 			if (ismenu == true )
 			{
 				menu = new Menu(gameScene);
-			
 			}
 			
 			// Create the gameover screen
-			
 			//if (inGameOver == true )
 			//{
 				gameOverScreen = new GameOver(player.Sprite.Position.X, player.Sprite.Position.Y,gameScene);
-			
 			//}
 				
 			//Run the scene.
+			bgmusicPlayer.Play();
 			Director.Instance.RunWithScene(gameScene, true);
 		}
 		
@@ -183,13 +185,8 @@ namespace FlappyBird
 			//Determine whether the player tapped the screen
 			var touches = Touch.GetData(0);
 			GamePadData data = GamePad.GetData(0);
-
-			
-			
 			
 			// Starts the game once the player has tapped the screen
-
-						
 			if (ismenu == true)
 			{
 				if (touches.Count > 0 )
@@ -200,16 +197,13 @@ namespace FlappyBird
 					inGameOver = false;
 
 					seconds.Reset();	
-
+					clickPlayer.Play();
 				}
 			}
 			
 			// Removes the menu from the screen
 			if (isgame == true)
 			{
-			
-				
-
 				menu.Update(0.0f);
 					
 				//Makes the UI visiable to the player
@@ -218,7 +212,7 @@ namespace FlappyBird
 				gunLabel.Visible = true;
 				enemiesLabel.Visible = true;
 				
-				if ((newLevel)) // if new level is true
+				if (newLevel) // if new level is true
 				{
 					for(int i = 0; i < 5 * level; i++) //5 more enemies each level
 					{
@@ -230,9 +224,9 @@ namespace FlappyBird
 							{
 								float tempX = r.Next(1,3000); //Random coords between 1 and 1500
 								float tempY = r.Next(1,3000);
-								float tempSpeed = r.Next(2,15); //Vary the speed (divide by 10 in the enemy method)
+								float tempSpeed = r.Next(5,15); //Vary the speed (divide by 10 in the enemy method)
 								Vector2 spawnPoint = new Vector2(tempX,tempY);
-								if((Vector2.Distance(player.GetPos(), spawnPoint) > 250) && (Vector2.Distance(player.GetPos(), spawnPoint) < 600)) // Can't spawn on the player or too far
+								if((Vector2.Distance(player.GetPos(), spawnPoint) > 250) && (Vector2.Distance(player.GetPos(), spawnPoint) < 1000)) // Can't spawn on the player or too far
 								{
 									Enemy enemy = new Enemy(spawnPoint.X, spawnPoint.Y, tempSpeed, player, gameScene);
 									enemies.Add(enemy); //Spawn enemy at random coords
@@ -246,237 +240,238 @@ namespace FlappyBird
 					}
 				}
 				
-
-			timerLabel.Visible = true;
-			hudLabel.Visible = true; 
-			gunLabel.Visible = true;
-			
-				
+				timerLabel.Visible = true;
+				hudLabel.Visible = true; 
+				gunLabel.Visible = true;
+							
 				// hides the game over screen while the game is running
-				
 				if (isgame == true)
 				{
-					
 					gameOverScreen.Hide();
 				}
 				
 				// creates the game over screen
-				
 				if (lives ==0 )
-					
 				{
 					inGameOver = true;
 					if (inGameOver == true)
 					{
-						
-					//ismenu = false ;
-					//isgame = false;
-					timerLabel.Visible = false;
-					hudLabel.Visible = false; 
-					gunLabel.Visible = false;
-					gameOverScreen.Update(0.0f, 0.0f, 0.0f);
+						//ismenu = false ;
+						//isgame = false;
+						timerLabel.Visible = false;
+						hudLabel.Visible = false; 
+						gunLabel.Visible = false;
+						enemiesLabel.Visible = false;
+						gameOverScreen.Update(0.0f, 0.0f, 0.0f);
+						for (int i = enemies.Count - 1; i >= 0; i--)
+						{
+							enemies[i].Alive = false;
+							enemies[i].Update(player, gameScene);
+							enemies.RemoveAt(i);
+						}
 					}
 					//ismenu = false ;
 					//isgame = true;
 					//quitGame = true; 
-					
-					
 				}
 				
-				
-			
-						
-
 				if (enemiesRemaining == level*5)
 					newLevel = false; //Stop spawning enemies
+				
+				if (enemiesRemaining == 0 && (!nextLevelVoice)) //All enemies are dead
+				{
+					nextLevelVoice = true;
+					nextLevelPlayer.Play();
+					reloadLabel.Text = "Prepare for the next level!";
+					reloadLabel.Visible = true;
+					timeStamp3 = (float)seconds.Seconds() + 2f;
+				}
 													
-				if (enemiesRemaining == 0) //All enemies are dead
+				if ((seconds.Seconds() >= timeStamp3) && nextLevelVoice) //All enemies are dead
 				{
 					level++; //Next level
+					reloadLabel.Visible = false;
 					newLevel = true;
+					nextLevelVoice = false;
 					background.NextMap(level); //New map texture
 				}
-								
-
-			//Move the player using basic boolean logic
-			if (Input2.GamePad0.Up.Down)
-				analogY = -1.0f;
-			else
-				analogY = 0.0f;
-						
-			if (Input2.GamePad0.Left.Down)
-				analogX = -1.0f;
-			else
-				analogX = 0.0f;
-						
-			if (Input2.GamePad0.Right.Down)
-				analogX = 1.0f;
-					
-			if (Input2.GamePad0.Down.Down)
-				analogY = 1.0f;
-						
-			if (Input2.GamePad0.Triangle.Down) //Respawnbutton
-				player.Alive = true;
-						
-			if (Input2.GamePad0.R.Down)
-			{
-				if(bulletsLeft> 0 && (!reloading)) //Can't shoot whilst reloading
-				{
-					if (seconds.Seconds() >= timeStamp) //For automatic firing the fire rate is set by ensuring that
-					{									//the time difference between the previous shot and this is equal					
-						Bullet bullet = new Bullet(gameScene); //to the hard coded fire rate.
-						bullet.Fire(player.GetX(), player.GetY(), player.GetAngle());
-						bullets.Add(bullet);
-						bulletsLeft = bulletsLeft - 1;
-						timeStamp = (float)seconds.Seconds() + timeBetweenShots; //Set the time for next shot
-					}
-				}
+				
+				//Move the player using basic boolean logic
+				if (Input2.GamePad0.Up.Down)
+					analogY = -1.0f;
 				else
-				{
-					reloadLabel.Text = "Press X to reload!";
-					reloadLabel.Visible = true;
-				}
-			}
-			
-			if (Input2.GamePad0.Cross.Down) //Reload button
-			{
-					reloadLabel.Text = "Reloading...";
-					reloadLabel.Visible = true;
-					reloading = true;
-					timeStamp = (float)seconds.Seconds() + reloadTime; //Set the time for when reload is done
-			}
-			
-			if (reloading)
-			{
-				if (seconds.Seconds() >= timeStamp) //When elapsed time reaches the set reload finish time
-				{
-					reloadLabel.Text = "Press X to reload!";
-					reloadLabel.Visible = false;
-					reloading = false;
-					bulletsLeft = 16; //Reload magazine
-				}
-			}
-		
-			//Rotate according to the right analog stick, or if it's not moving, then according the the left stick.
-			//So basically if you are not pointing the player in any direction with the right stick he is going to point in the walking direction
-			//or if both sticks are not moving, then use the analogX and analogY values(D-PAD movement)
-			if (data.AnalogRightX > 0.2f || data.AnalogRightX < -0.2f || data.AnalogRightY > 0.2f || data.AnalogRightY < -0.2f) 
-			{
-				var angleInRadians = FMath.Atan2 (-data.AnalogRightX, -data.AnalogRightY);
-				var angleInRadians2 = FMath.Atan2 (-data.AnalogLeftX, -data.AnalogLeftY);
-				playerRotation = new Vector2 (FMath.Cos (angleInRadians), FMath.Sin (angleInRadians));
-				playerMovement = new Vector2 (FMath.Cos (angleInRadians2), FMath.Sin (angleInRadians2));
-			} 
-			else if (data.AnalogLeftX > 0.2f || data.AnalogLeftX < -0.2f || data.AnalogLeftY > 0.2f || data.AnalogLeftY < -0.2f) 
-			{
-				var angleInRadians = FMath.Atan2 (-data.AnalogLeftX, -data.AnalogLeftY);
-				playerRotation = new Vector2 (FMath.Cos (angleInRadians), FMath.Sin (angleInRadians));
-				playerMovement = playerRotation;
-			} 
-			else if(analogX != 0.0f || analogY != 0.0f)
-			{
-				var angleInRadians = FMath.Atan2 (-analogX, -analogY);
-				playerRotation = new Vector2 (FMath.Cos (angleInRadians), FMath.Sin (angleInRadians));
-			}
-						
-			//North, east, south, west are changed via the d-pad and playerrotation via the sticks
-			if (Input2.GamePad0.AnalogLeft.Length() > 0.1f)
-				player.UpdateUsingANALOG(playerMovement, playerRotation, gameScene);
-			else
-				player.UpdateUsingDPAD(analogX, analogY, playerRotation, gameScene);
-						
-			//Move the bullet if its being fired, if not nothing happens
-			for (int i = bullets.Count - 1; i >= 0; i--) 
-			{
-				bullets[i].Update(gameScene);
-			}
-			
-			//Update all enemies in the list
-			for (int i = enemies.Count - 1; i >= 0; i--) 
-			{
-				enemies[i].Update(player, gameScene);
-			}
-			
-			if(player.Alive) 
-			{
-				//Camera. Focus on player. Don't let the camera show any off map area. If the player walks near the edge
-				//leave the edge of the camera on the edge of the map but let the player walk to the actual map edge.
-				//If the player isn't within screenwidth/2 or screen height/2 of a edge of the map then center on the
-				//player.
-				if ((player.GetX() < Director.Instance.GL.Context.GetViewport().Width*0.5f) || (player.GetX() > 3000f - Director.Instance.GL.Context.GetViewport().Width*0.5f) ||
-				    (player.GetY() < Director.Instance.GL.Context.GetViewport().Height*0.5f) || (player.GetY() > 3000f - Director.Instance.GL.Context.GetViewport().Height*0.5f))
-				{
-					if (player.GetX() < Director.Instance.GL.Context.GetViewport().Width*0.5f) //Near left side
-						gameScene.Camera2D.SetViewY(new Vector2(0.0f,Director.Instance.GL.Context.GetViewport().Height*0.5f), new Vector2(Director.Instance.GL.Context.GetViewport().Width*0.5f, player.GetY()));
-					if (player.GetX() > 3000f - Director.Instance.GL.Context.GetViewport().Width*0.5f) //Near right side
-						gameScene.Camera2D.SetViewY(new Vector2(0.0f,Director.Instance.GL.Context.GetViewport().Height*0.5f), new Vector2(3000f - Director.Instance.GL.Context.GetViewport().Width*0.5f, player.GetY()));
-					if (player.GetY() < Director.Instance.GL.Context.GetViewport().Height*0.5f) //Near bottom side
-						gameScene.Camera2D.SetViewY(new Vector2(0.0f,Director.Instance.GL.Context.GetViewport().Height*0.5f), new Vector2(player.GetX(), Director.Instance.GL.Context.GetViewport().Height*0.5f));
-					if (player.GetY() > 3000.0f - Director.Instance.GL.Context.GetViewport().Height*0.5f) //Near top side
-						gameScene.Camera2D.SetViewY(new Vector2(0.0f,Director.Instance.GL.Context.GetViewport().Height*0.5f), 
-						                            new Vector2(player.GetX(), 3000.0f - Director.Instance.GL.Context.GetViewport().Height*0.5f));
-					if ((player.GetX() < Director.Instance.GL.Context.GetViewport().Width*0.5f) && (player.GetY() < Director.Instance.GL.Context.GetViewport().Height*0.5f)) //Near bottom left corner
-						gameScene.Camera2D.SetViewY(new Vector2(0.0f,Director.Instance.GL.Context.GetViewport().Height*0.5f),
-						                            new Vector2(Director.Instance.GL.Context.GetViewport().Width*0.5f, Director.Instance.GL.Context.GetViewport().Height*0.5f));
-					if ((player.GetX() < Director.Instance.GL.Context.GetViewport().Width*0.5f) && (player.GetY() > 3000.0f - Director.Instance.GL.Context.GetViewport().Height*0.5f)) //Near top left corner
-						gameScene.Camera2D.SetViewY(new Vector2(0.0f,Director.Instance.GL.Context.GetViewport().Height*0.5f),
-						                            new Vector2(Director.Instance.GL.Context.GetViewport().Width*0.5f, 3000.0f - Director.Instance.GL.Context.GetViewport().Height*0.5f));
-					if ((player.GetX() > 3000.0f - Director.Instance.GL.Context.GetViewport().Width*0.5f) && (player.GetY() > 3000.0f - Director.Instance.GL.Context.GetViewport().Height*0.5f)) //Near top right corner
-						gameScene.Camera2D.SetViewY(new Vector2(0.0f,Director.Instance.GL.Context.GetViewport().Height*0.5f),
-						                            new Vector2(3000.0f - Director.Instance.GL.Context.GetViewport().Width*0.5f, 3000.0f - Director.Instance.GL.Context.GetViewport().Height*0.5f));
-					if ((player.GetX() > 3000.0f -  Director.Instance.GL.Context.GetViewport().Width*0.5f) && (player.GetY() < Director.Instance.GL.Context.GetViewport().Height*0.5f)) //Near bottom right corner
-						gameScene.Camera2D.SetViewY(new Vector2(0.0f,Director.Instance.GL.Context.GetViewport().Height*0.5f),
-						                            new Vector2(Director.Instance.GL.Context.GetViewport().Width*0.5f, Director.Instance.GL.Context.GetViewport().Height*0.5f));
-				}
+					analogY = 0.0f;
+							
+				if (Input2.GamePad0.Left.Down)
+					analogX = -1.0f;
 				else
-					gameScene.Camera2D.SetViewY(new Vector2(0.0f,Director.Instance.GL.Context.GetViewport().Height*0.5f), player.GetPos()); //Player not near an edge
-					
-				//Create map boundaries
-				if (player.GetX() < 0.0f) //Left side boundary
-					player.SetPlayer(0.0f, player.GetY());
-				if (player.GetX() > 3000.0f) //Right side boundary
-					player.SetPlayer(3000.0f, player.GetY());
-				if (player.GetY() < 0.0f) //Bottom side boundary
-					player.SetPlayer(player.GetX(), 0.0f);
-				if (player.GetY() > 3000.0f) //Top side boundary
-					player.SetPlayer(player.GetX(), 3000.0f);
-					
-				for (int i = enemies.Count - 1; i >= 0; i--) //Check all enemies for collisions with player or bullet
+					analogX = 0.0f;
+							
+				if (Input2.GamePad0.Right.Down)
+					analogX = 1.0f;
+						
+				if (Input2.GamePad0.Down.Down)
+					analogY = 1.0f;
+							
+				if (Input2.GamePad0.Triangle.Down) //Respawnbutton
+					player.Alive = true;
+										
+				if (Input2.GamePad0.R.Down)
 				{
-					if (enemies[i].Alive ) 
+					if(bulletsLeft> 0 && (!reloading)) //Can't shoot whilst reloading
 					{
-						if (enemies[i].HasCollidedWithPlayer (player.Sprite) == true) //Colision between player and enemies
-						{
-							lives = lives - 1;
-							player.Alive = false; 
+						if (seconds.Seconds() >= timeStamp) //For automatic firing the fire rate is set by ensuring that
+						{									//the time difference between the previous shot and this is equal					
+							Bullet bullet = new Bullet(gameScene); //to the hard coded fire rate.
+							bullet.Fire(player.GetX(), player.GetY(), player.GetAngle());
+							bulletPlayer.Play();
+							bullets.Add(bullet);
+							bulletsLeft = bulletsLeft - 1;
+							timeStamp = (float)seconds.Seconds() + timeBetweenShots; //Set the time for next shot
 						}
-						for (int j = bullets.Count - 1; j >= 0; j--) 
+					}
+					else
+					{
+						reloadLabel.Text = "Press X to reload!";
+						reloadLabel.Visible = true;
+					}
+				}
+				
+				if (Input2.GamePad0.Cross.Down) //Reload button
+				{
+						reloadLabel.Text = "Reloading...";
+						reloadLabel.Visible = true;
+						reloading = true;
+						timeStamp = (float)seconds.Seconds() + reloadTime; //Set the time for when reload is done
+				}
+				
+				if (reloading)
+				{
+					if (seconds.Seconds() >= timeStamp) //When elapsed time reaches the set reload finish time
+					{
+						reloadLabel.Text = "Press X to reload!";
+						reloadLabel.Visible = false;
+						reloading = false;
+						bulletsLeft = 20; //Reload magazine
+					}
+				}
+			
+				//Rotate according to the right analog stick, or if it's not moving, then according the the left stick.
+				//So basically if you are not pointing the player in any direction with the right stick he is going to point in the walking direction
+				//or if both sticks are not moving, then use the analogX and analogY values(D-PAD movement)
+				if (data.AnalogRightX > 0.2f || data.AnalogRightX < -0.2f || data.AnalogRightY > 0.2f || data.AnalogRightY < -0.2f) 
+				{
+					var angleInRadians = FMath.Atan2 (-data.AnalogRightX, -data.AnalogRightY);
+					var angleInRadians2 = FMath.Atan2 (-data.AnalogLeftX, -data.AnalogLeftY);
+					playerRotation = new Vector2 (FMath.Cos (angleInRadians), FMath.Sin (angleInRadians));
+					playerMovement = new Vector2 (FMath.Cos (angleInRadians2), FMath.Sin (angleInRadians2));
+				} 
+				else if (data.AnalogLeftX > 0.2f || data.AnalogLeftX < -0.2f || data.AnalogLeftY > 0.2f || data.AnalogLeftY < -0.2f) 
+				{
+					var angleInRadians = FMath.Atan2 (-data.AnalogLeftX, -data.AnalogLeftY);
+					playerRotation = new Vector2 (FMath.Cos (angleInRadians), FMath.Sin (angleInRadians));
+					playerMovement = playerRotation;
+				} 
+				else if(analogX != 0.0f || analogY != 0.0f)
+				{
+					var angleInRadians = FMath.Atan2 (-analogX, -analogY);
+					playerRotation = new Vector2 (FMath.Cos (angleInRadians), FMath.Sin (angleInRadians));
+				}
+							
+				//North, east, south, west are changed via the d-pad and playerrotation via the sticks
+				if (Input2.GamePad0.AnalogLeft.Length() > 0.1f)
+					player.UpdateUsingANALOG(playerMovement, playerRotation, gameScene);
+				else
+					player.UpdateUsingDPAD(analogX, analogY, playerRotation, gameScene);
+							
+				//Move the bullet if its being fired, if not nothing happens
+				for (int i = bullets.Count - 1; i >= 0; i--) 
+					bullets[i].Update(gameScene);
+								
+				//Update all enemies in the list
+				for (int i = enemies.Count - 1; i >= 0; i--) 
+					enemies[i].Update(player, gameScene);
+								
+				if(player.Alive) 
+				{
+					//Camera. Focus on player. Don't let the camera show any off map area. If the player walks near the edge
+					//leave the edge of the camera on the edge of the map but let the player walk to the actual map edge.
+					//If the player isn't within screenwidth/2 or screen height/2 of a edge of the map then center on the
+					//player.
+					if ((player.GetX() < Director.Instance.GL.Context.GetViewport().Width*0.5f) || (player.GetX() > 3000f - Director.Instance.GL.Context.GetViewport().Width*0.5f) ||
+					    (player.GetY() < Director.Instance.GL.Context.GetViewport().Height*0.5f) || (player.GetY() > 3000f - Director.Instance.GL.Context.GetViewport().Height*0.5f))
+					{
+						if (player.GetX() < Director.Instance.GL.Context.GetViewport().Width*0.5f) //Near left side
+							gameScene.Camera2D.SetViewY(new Vector2(0.0f,Director.Instance.GL.Context.GetViewport().Height*0.5f), new Vector2(Director.Instance.GL.Context.GetViewport().Width*0.5f, player.GetY()));
+						if (player.GetX() > 3000f - Director.Instance.GL.Context.GetViewport().Width*0.5f) //Near right side
+							gameScene.Camera2D.SetViewY(new Vector2(0.0f,Director.Instance.GL.Context.GetViewport().Height*0.5f), new Vector2(3000f - Director.Instance.GL.Context.GetViewport().Width*0.5f, player.GetY()));
+						if (player.GetY() < Director.Instance.GL.Context.GetViewport().Height*0.5f) //Near bottom side
+							gameScene.Camera2D.SetViewY(new Vector2(0.0f,Director.Instance.GL.Context.GetViewport().Height*0.5f), new Vector2(player.GetX(), Director.Instance.GL.Context.GetViewport().Height*0.5f));
+						if (player.GetY() > 3000.0f - Director.Instance.GL.Context.GetViewport().Height*0.5f) //Near top side
+							gameScene.Camera2D.SetViewY(new Vector2(0.0f,Director.Instance.GL.Context.GetViewport().Height*0.5f), 
+							                            new Vector2(player.GetX(), 3000.0f - Director.Instance.GL.Context.GetViewport().Height*0.5f));
+						if ((player.GetX() < Director.Instance.GL.Context.GetViewport().Width*0.5f) && (player.GetY() < Director.Instance.GL.Context.GetViewport().Height*0.5f)) //Near bottom left corner
+							gameScene.Camera2D.SetViewY(new Vector2(0.0f,Director.Instance.GL.Context.GetViewport().Height*0.5f),
+							                            new Vector2(Director.Instance.GL.Context.GetViewport().Width*0.5f, Director.Instance.GL.Context.GetViewport().Height*0.5f));
+						if ((player.GetX() < Director.Instance.GL.Context.GetViewport().Width*0.5f) && (player.GetY() > 3000.0f - Director.Instance.GL.Context.GetViewport().Height*0.5f)) //Near top left corner
+							gameScene.Camera2D.SetViewY(new Vector2(0.0f,Director.Instance.GL.Context.GetViewport().Height*0.5f),
+							                            new Vector2(Director.Instance.GL.Context.GetViewport().Width*0.5f, 3000.0f - Director.Instance.GL.Context.GetViewport().Height*0.5f));
+						if ((player.GetX() > 3000.0f - Director.Instance.GL.Context.GetViewport().Width*0.5f) && (player.GetY() > 3000.0f - Director.Instance.GL.Context.GetViewport().Height*0.5f)) //Near top right corner
+							gameScene.Camera2D.SetViewY(new Vector2(0.0f,Director.Instance.GL.Context.GetViewport().Height*0.5f),
+							                            new Vector2(3000.0f - Director.Instance.GL.Context.GetViewport().Width*0.5f, 3000.0f - Director.Instance.GL.Context.GetViewport().Height*0.5f));
+						if ((player.GetX() > 3000.0f -  Director.Instance.GL.Context.GetViewport().Width*0.5f) && (player.GetY() < Director.Instance.GL.Context.GetViewport().Height*0.5f)) //Near bottom right corner
+							gameScene.Camera2D.SetViewY(new Vector2(0.0f,Director.Instance.GL.Context.GetViewport().Height*0.5f),
+							                            new Vector2(Director.Instance.GL.Context.GetViewport().Width*0.5f, Director.Instance.GL.Context.GetViewport().Height*0.5f));
+					}
+					else
+						gameScene.Camera2D.SetViewY(new Vector2(0.0f,Director.Instance.GL.Context.GetViewport().Height*0.5f), player.GetPos()); //Player not near an edge
+						
+					//Create map boundaries
+					if (player.GetX() < 0.0f) //Left side boundary
+						player.SetPlayer(0.0f, player.GetY());
+					if (player.GetX() > 3000.0f) //Right side boundary
+						player.SetPlayer(3000.0f, player.GetY());
+					if (player.GetY() < 0.0f) //Bottom side boundary
+						player.SetPlayer(player.GetX(), 0.0f);
+					if (player.GetY() > 3000.0f) //Top side boundary
+						player.SetPlayer(player.GetX(), 3000.0f);
+						
+					for (int i = enemies.Count - 1; i >= 0; i--) //Check all enemies for collisions with player or bullet
+					{
+						if (enemies[i].Alive ) 
 						{
-							if (enemies[i].HasCollidedWithBullet (bullets[j].Sprite) == true)
+							if (enemies[i].HasCollidedWithPlayer (player.Sprite) == true) //Colision between player and enemies
 							{
-								score = score + 1;
-								enemies[i].Alive = false; //Remove the enemy from the scene 
-								enemies[i].Update(player, gameScene);
-								enemies.RemoveAt(i); //Remove the enemy from the list
-								enemiesRemaining--;
-								bullets[j].ResetBullet(-500,-500);
+								lives = lives - 1;
+								player.Alive = false; 
 							}
-							Vector2 bulletPosition = bullets[j].GetPos(); 			
-							if(bulletPosition.X == -500 && bulletPosition.Y == -500)
+							for (int j = bullets.Count - 1; j >= 0; j--) 
 							{
-								bullets.RemoveAt(j);
+								if (enemies[i].HasCollidedWithBullet (bullets[j].Sprite) == true)
+								{
+									score = score + 1;
+									enemies[i].Alive = false; //Remove the enemy from the scene 
+									enemies[i].Update(player, gameScene);
+									enemies.RemoveAt(i); //Remove the enemy from the list
+									enemiesRemaining--;
+									bullets[j].ResetBullet(-500,-500);
+								}
+								Vector2 bulletPosition = bullets[j].GetPos(); 			
+								if(bulletPosition.X == -500 && bulletPosition.Y == -500)
+								{
+									bullets.RemoveAt(j);
+								}
 							}
 						}
 					}
 				}
+						
+				//Update the UI
+				hudLabel.Text = "Score: " + score + " 		Lives: " + lives + " 		Level: " + level;
+				timerLabel.Text = "Time Survived: " + (int)seconds.Seconds() + " secs";
+				gunLabel.Text = "Bullets Left: " + bulletsLeft;
+				enemiesLabel.Text = "Enemies left: " + enemiesRemaining;
 			}
-					
-			//Update the UI
-			hudLabel.Text = "Score: " + score + " 		Lives: " + lives + " 		Level: " + level;
-			timerLabel.Text = "Time Survived: " + (int)seconds.Seconds() + " secs";
-			gunLabel.Text = "Bullets Left: " + bulletsLeft;
-			enemiesLabel.Text = "Enemies left: " + enemiesRemaining;
-		}
 		}
 	}
 }

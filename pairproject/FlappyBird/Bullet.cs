@@ -71,7 +71,7 @@ namespace FlappyBird
 		public void Update(Scene scene)
 		{
 				sprite.Position = new Vector2(sprite.Position.X+direction.X*speed, sprite.Position.Y+direction.Y*speed);
-				if(Vector2.Distance(sprite.Position,origin) > 300) //If its travelled 300 squares reset it
+				if(Vector2.Distance(sprite.Position,origin) > 350) //If its travelled 300 squares reset it
 				{
 					ResetBullet(-500, -500);
 					sprite.Visible = false;
