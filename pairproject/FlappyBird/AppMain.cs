@@ -17,7 +17,7 @@ namespace FlappyBird
 	{
 		private static Sce.PlayStation.HighLevel.GameEngine2D.Scene 	gameScene;
 		private static Sce.PlayStation.HighLevel.UI.Scene 				uiScene;
-		private static Sce.PlayStation.HighLevel.UI.Label				hudLabel, timerLabel, gunLabel, reloadLabel;
+		private static Sce.PlayStation.HighLevel.UI.Label				hudLabel, timerLabel, gunLabel, reloadLabel, enemiesLabel;
 		
 		private static bool 		reloading = false, quitGame = false;
 		private static List<Enemy>  enemies;
@@ -25,12 +25,13 @@ namespace FlappyBird
 		private static Player		player;
 		private static Background	background;
 		private static Menu         menu;
-		private static float 		analogX, analogY, timeStamp, timeBetweenShots = 0.3f, reloadTime = 4.0f;
+		private static float 		analogX, analogY, timeStamp, timeStamp2, timeBetweenShots = 0.3f, reloadTime = 3.0f;
 		private static Vector2 		playerRotation = new Vector2((0.0f),(0.0f)), playerMovement = new Vector2((0.0f),(0.0f)); 
-		private static int			score = 0, lives = 3, level = 1, bulletsLeft = 16;
+		private static int			score = 0, lives = 3, level = 1, bulletsLeft = 16, enemiesRemaining = 0;
 		private static Timer		seconds;
 		private static bool ismenu = true;
 		private static bool isgame = false; 
+		private static bool newLevel = true; 
 							
 		public static void Main (string[] args)
 		{
@@ -102,9 +103,6 @@ namespace FlappyBird
 			timerLabel.Visible = false;
 			panel.AddChildLast(timerLabel);
 			
-			
-			
-			
 			//Setup the Gun label (time)
 			gunLabel = new Sce.PlayStation.HighLevel.UI.Label();
 			gunLabel.HorizontalAlignment = HorizontalAlignment.Center;
@@ -125,12 +123,20 @@ namespace FlappyBird
 			reloadLabel.Visible = false;
 			panel.AddChildLast(reloadLabel);
 			
+			//Setup the enemies left label
+			enemiesLabel = new Sce.PlayStation.HighLevel.UI.Label();
+			enemiesLabel.HorizontalAlignment = HorizontalAlignment.Left;
+			enemiesLabel.VerticalAlignment = VerticalAlignment.Bottom;
+			enemiesLabel.Width = panel.Width;
+			enemiesLabel.SetPosition(0.0f, Director.Instance.GL.Context.GetViewport().Height/1.05f);
+			enemiesLabel.Text = "Enemies left: " + enemiesRemaining;
+			enemiesLabel.Visible = false;
+			panel.AddChildLast(enemiesLabel);
+			
 			//Add the panel to the UISystem
 			uiScene.RootWidget.AddChildLast(panel);
 			UISystem.SetScene(uiScene);
 				
-			
-			
 			//Create the background.
 			background = new Background(gameScene);
 			
@@ -139,8 +145,7 @@ namespace FlappyBird
 			
 			//Create the enemy list and spawn one at (0,0)
 			enemies = new List<Enemy>();
-			Enemy enemy = new Enemy(0.0f, 0.0f, player, gameScene);
-			enemies.Add(enemy);
+			
 					
 			//Create the bullet
 			bullets = new List<Bullet>();
@@ -165,87 +170,88 @@ namespace FlappyBird
 			//Determine whether the player tapped the screen
 			var touches = Touch.GetData(0);
 			GamePadData data = GamePad.GetData(0);
-			
-			
+						
 			if (ismenu == true)
 			{
 				if (touches.Count > 0 )
 				{
 					ismenu = false ;
 					isgame = true;	
+					seconds.Reset();	
 				}
 			}
 			
 			if (isgame == true)
 			{
-				
 				menu.Update(0.0f);
+					
+				//Makes the UI visiable to the player
+				timerLabel.Visible = true;
+				hudLabel.Visible = true; 
+				gunLabel.Visible = true;
+				enemiesLabel.Visible = true;
 				
-			//makes the UI visiable to the player
+				if ((newLevel)) // if new level is true
+				{
+					for(int i = 0; i < 5 * level; i++) //5 more enemies each level
+					{
+						if (seconds.Seconds() >= timeStamp2)
+						{
+							Random r = new Random();
+							bool spawn = false; //If random coords are near the player pick another set
+							while(spawn == false)
+							{
+								float tempX = r.Next(1,3000); //Random coords between 1 and 1500
+								float tempY = r.Next(1,3000);
+								float tempSpeed = r.Next(2,15); //Vary the speed (divide by 10 in the enemy method)
+								Vector2 spawnPoint = new Vector2(tempX,tempY);
+								if((Vector2.Distance(player.GetPos(), spawnPoint) > 250) && (Vector2.Distance(player.GetPos(), spawnPoint) < 600)) // Can't spawn on the player or too far
+								{
+									Enemy enemy = new Enemy(spawnPoint.X, spawnPoint.Y, tempSpeed, player, gameScene);
+									enemies.Add(enemy); //Spawn enemy at random coords
+									enemiesRemaining++;
+									spawn = true; //Exit the loop
+								}
+							}
+							timeStamp2 = (float)seconds.Seconds() + 0.05f; 
+						} //If you create new instances too close in time, they will produce the same 
+						//series of random numbers as the random generator is seeded from the system clock.
+					}
+				}
 				
-			timerLabel.Visible = true;
-			hudLabel.Visible = true; 
-			gunLabel.Visible = true;
-			
-			
-						
+				if (enemiesRemaining == level*5)
+					newLevel = false; //Stop spawning enemies
+													
+				if (enemiesRemaining == 0) //All enemies are dead
+				{
+					level++; //Next level
+					newLevel = true;
+					background.NextMap(level); //New map texture
+				}
+								
 			//Move the player using basic boolean logic
 			if (Input2.GamePad0.Up.Down)
-			{
 				analogY = -1.0f;
-			}
-				else
-			{
+			else
 				analogY = 0.0f;
-			}
-			
+						
 			if (Input2.GamePad0.Left.Down)
-			{
 				analogX = -1.0f;
-			}
-				else
-			{
+			else
 				analogX = 0.0f;
-			}
-			
+						
 			if (Input2.GamePad0.Right.Down)
 				analogX = 1.0f;
 					
 			if (Input2.GamePad0.Down.Down)
 				analogY = 1.0f;
-			
-			if (Input2.GamePad0.Square.Down) //Spawn enemies ('A' on keyboard)
-			{
-				if (enemies.Count < 15) //Max number of enemies
-				{
-					Random r = new Random();
-					bool spawn = false; //If random coords are near the player pick another set
-					while(spawn == false)
-					{
-						float tempX = r.Next(1,1500); //Random coords between 1 and 1500
-						float tempY = r.Next(1,1500);
-						Vector2 spawnPoint = new Vector2(tempX,tempY);
-						if(Vector2.Distance(player.GetPos(), spawnPoint) > 200) // Can't spawn on the player
-						{
-							Enemy enemy = new Enemy(spawnPoint.X, spawnPoint.Y, player, gameScene);
-							enemies.Add(enemy); //Spawn enemy at random coords
-							spawn = true; //Exit the loop
-						}
-					}
-				}
-			}
-			
+						
 			if (Input2.GamePad0.Triangle.Down) //Respawnbutton
-			{
 				player.Alive = true;
-				
-			}
-			
-			
-			
+						
 			if (Input2.GamePad0.R.Down)
 			{
-				if(bulletsLeft>0)
+				if(bulletsLeft> 0 && (!reloading)) //Can't shoot whilst reloading
 				{
 					if (seconds.Seconds() >= timeStamp) //For automatic firing the fire rate is set by ensuring that
 					{									//the time difference between the previous shot and this is equal					
@@ -265,14 +271,10 @@ namespace FlappyBird
 			
 			if (Input2.GamePad0.Cross.Down) //Reload button
 			{
-				
-				if(bulletsLeft==0)
-				{
 					reloadLabel.Text = "Reloading...";
 					reloadLabel.Visible = true;
 					reloading = true;
 					timeStamp = (float)seconds.Seconds() + reloadTime; //Set the time for when reload is done
-				}
 			}
 			
 			if (reloading)
@@ -387,6 +389,7 @@ namespace FlappyBird
 								enemies[i].Alive = false; //Remove the enemy from the scene 
 								enemies[i].Update(player, gameScene);
 								enemies.RemoveAt(i); //Remove the enemy from the list
+								enemiesRemaining--;
 								bullets[j].ResetBullet(-500,-500);
 							}
 							Vector2 bulletPosition = bullets[j].GetPos(); 			
@@ -403,6 +406,7 @@ namespace FlappyBird
 			hudLabel.Text = "Score: " + score + " 		Lives: " + lives + " 		Level: " + level;
 			timerLabel.Text = "Time Survived: " + (int)seconds.Seconds() + " secs";
 			gunLabel.Text = "Bullets Left: " + bulletsLeft;
+			enemiesLabel.Text = "Enemies left: " + enemiesRemaining;
 		}
 		}
 	}

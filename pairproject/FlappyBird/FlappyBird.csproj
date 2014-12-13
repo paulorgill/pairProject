@@ -71,5 +71,7 @@
     <Content Include="textures\a1.png" />
     <Content Include="textures\veggie_royale_title.png" />
     <Content Include="textures\menuScreen.png" />
+    <Content Include="textures\a2.png" />
+    <Content Include="textures\a4.png" />
   </ItemGroup>
 </Project>

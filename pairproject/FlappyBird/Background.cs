@@ -12,7 +12,7 @@ namespace FlappyBird
 	{	
 		//Private variables.
 		private SpriteUV[,] 	sprites;
-		private TextureInfo	textureInfo;
+		private TextureInfo	textureInfo, textureInfo2, textureInfo3;
 		
 		//Public functions.
 		public Background (Scene scene)
@@ -20,6 +20,8 @@ namespace FlappyBird
 			sprites	= new SpriteUV[3,3];
 			
 			textureInfo  		= new TextureInfo("/Application/textures/a1.png");
+			textureInfo2  		= new TextureInfo("/Application/textures/a2.png");
+			textureInfo3  		= new TextureInfo("/Application/textures/a4.png");
 			
 			for (int i = 0; i < 3; ++i)
 			{
@@ -39,6 +41,32 @@ namespace FlappyBird
 		public void Dispose()
 		{
 			textureInfo.Dispose();
+		}
+		
+		public void NextMap(int level)
+		{
+			if (level == 2)
+			{
+				for (int i = 0; i < 3; ++i)
+				{
+	    			for (int j = 0; j < 3; ++j)
+					{
+						sprites[i,j].TextureInfo = textureInfo2;
+					}
+				}
+			}
+			else if (level == 3)
+			{
+				for (int i = 0; i < 3; ++i)
+				{
+	    			for (int j = 0; j < 3; ++j)
+					{
+						sprites[i,j].TextureInfo = textureInfo3;
+					}
+				}
+			}
+			
+			
 		}
 		
 		public void Update(Vector2 playerPos)
