@@ -25,12 +25,14 @@ namespace FlappyBird
 		private static Player		player;
 		private static Background	background;
 		private static Menu         menu;
+		private static GameOver     gameOverScreen;
 		private static float 		analogX, analogY, timeStamp, timeBetweenShots = 0.3f, reloadTime = 4.0f;
 		private static Vector2 		playerRotation = new Vector2((0.0f),(0.0f)), playerMovement = new Vector2((0.0f),(0.0f)); 
 		private static int			score = 0, lives = 3, level = 1, bulletsLeft = 16;
 		private static Timer		seconds;
 		private static bool ismenu = true;
 		private static bool isgame = false; 
+		private static bool inGameOver = false; 
 							
 		public static void Main (string[] args)
 		{
@@ -150,11 +152,20 @@ namespace FlappyBird
 			//Create the timer
 			seconds = new Timer();
 			
+			//Create menu screen
 			if (ismenu == true )
 			{
 				menu = new Menu(gameScene);
 			
 			}
+			
+			// Create the gameover screen
+			
+			//if (inGameOver == true )
+			//{
+				gameOverScreen = new GameOver(player.Sprite.Position.X, player.Sprite.Position.Y,gameScene);
+			
+			//}
 				
 			//Run the scene.
 			Director.Instance.RunWithScene(gameScene, true);
@@ -167,17 +178,22 @@ namespace FlappyBird
 			GamePadData data = GamePad.GetData(0);
 			
 			
+			
+			// Starts the game once the player has tapped the screen
 			if (ismenu == true)
 			{
 				if (touches.Count > 0 )
 				{
 					ismenu = false ;
 					isgame = true;	
+					inGameOver = false;
 				}
 			}
 			
+			// Removes the menu from the screen
 			if (isgame == true)
 			{
+			
 				
 				menu.Update(0.0f);
 				
@@ -187,6 +203,39 @@ namespace FlappyBird
 			hudLabel.Visible = true; 
 			gunLabel.Visible = true;
 			
+				
+				// hides the game over screen while the game is running
+				
+				if (isgame == true)
+				{
+					
+					gameOverScreen.Hide();
+				}
+				
+				// creates the game over screen
+				
+				if (lives ==0 )
+					
+				{
+					inGameOver = true;
+					if (inGameOver == true)
+					{
+						
+					//ismenu = false ;
+					//isgame = false;
+					timerLabel.Visible = false;
+					hudLabel.Visible = false; 
+					gunLabel.Visible = false;
+					gameOverScreen.Update(0.0f, 0.0f, 0.0f);
+					}
+					//ismenu = false ;
+					//isgame = true;
+					//quitGame = true; 
+					
+					
+				}
+				
+				
 			
 						
 			//Move the player using basic boolean logic

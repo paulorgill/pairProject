@@ -8,10 +8,10 @@ using Sce.PlayStation.HighLevel.GameEngine2D.Base;
 
 namespace FlappyBird
 {
-	public class Menu
+	public class GameOver
 	{
 		//Private variables.
-		public static SpriteUV 	sprite;
+		public static SpriteUV 	gameoversprite;
 		private static TextureInfo	textureInfo;
 		
 		private static bool			alive;
@@ -22,19 +22,20 @@ namespace FlappyBird
 		//public SpriteUV Sprite { get{return sprite;} }
 		
 		//Public functions.
-		public Menu (Scene scene)
+		public GameOver (float startX, float startY,Scene scene)
 		{
+			
 			textureInfo  = new TextureInfo("/Application/textures/menuScreen.png");
 			
-			sprite	 		= new SpriteUV();
-			sprite 			= new SpriteUV(textureInfo);	
-			sprite.Quad.S 	= textureInfo.TextureSizef;
-			sprite.Position = new Vector2(0.0f,0.0f);
+			gameoversprite	 		= new SpriteUV();
+			gameoversprite 			= new SpriteUV(textureInfo);	
+			gameoversprite.Quad.S 	= textureInfo.TextureSizef;
+			gameoversprite.Position = new Vector2(startX, startY);
 			//sprite.Pivot 	= new Vector2(0.5f,0.5f);
 			
 			
 			//Add to the current scene.
-			scene.AddChild(sprite);
+			scene.AddChild(gameoversprite);
 		}
 		
 		public void Dispose()
@@ -42,14 +43,21 @@ namespace FlappyBird
 			textureInfo.Dispose();
 		}
 		
-		public void Update(float deltaTime)
+		public void Update(float startX, float startY,float deltaTime)
 		{			
 			
 			
-			sprite.Visible = false;
-			
+			gameoversprite.Visible = true;
+			gameoversprite.Position = new Vector2(startX, startY);
 		}	
 		
+		public void Hide()
+		{			
+			
+			
+			gameoversprite.Visible = false;
+			
+		}	
 		
 		
 		
