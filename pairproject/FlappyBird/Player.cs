@@ -219,6 +219,7 @@ namespace FlappyBird
 			if (Alive == true )
 			{
 				sprite.Visible = true;
+				
 			}
 		}
 		

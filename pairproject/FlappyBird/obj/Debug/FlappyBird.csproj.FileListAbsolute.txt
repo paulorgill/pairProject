@@ -475,3 +475,13 @@ C:\Users\Alex\Dropbox\University Year 2\TECHNICAL GAMES PRODUCTION\GitHub\pairPr
 C:\Users\Alex\Dropbox\University Year 2\TECHNICAL GAMES PRODUCTION\GitHub\pairProject\pairproject\FlappyBird\bin\Debug\FlappyBird-signed\Application\textures\a8.png
 C:\Users\Alex\Dropbox\University Year 2\TECHNICAL GAMES PRODUCTION\GitHub\pairProject\pairproject\FlappyBird\bin\Debug\FlappyBird-signed\Application\textures\a9.png
 C:\Users\Alex\Dropbox\University Year 2\TECHNICAL GAMES PRODUCTION\GitHub\pairProject\pairproject\FlappyBird\bin\Debug\FlappyBird-signed\Application\textures\a10.png
+C:\Users\paul\Desktop\githubtest\pairProject\pairproject\FlappyBird\bin\Debug\FlappyBird-unsigned\Application\textures\a6.png
+C:\Users\paul\Desktop\githubtest\pairProject\pairproject\FlappyBird\bin\Debug\FlappyBird-unsigned\Application\textures\a7.png
+C:\Users\paul\Desktop\githubtest\pairProject\pairproject\FlappyBird\bin\Debug\FlappyBird-unsigned\Application\textures\a8.png
+C:\Users\paul\Desktop\githubtest\pairProject\pairproject\FlappyBird\bin\Debug\FlappyBird-unsigned\Application\textures\a9.png
+C:\Users\paul\Desktop\githubtest\pairProject\pairproject\FlappyBird\bin\Debug\FlappyBird-unsigned\Application\textures\a10.png
+C:\Users\paul\Desktop\githubtest\pairProject\pairproject\FlappyBird\bin\Debug\FlappyBird-signed\Application\textures\a6.png
+C:\Users\paul\Desktop\githubtest\pairProject\pairproject\FlappyBird\bin\Debug\FlappyBird-signed\Application\textures\a7.png
+C:\Users\paul\Desktop\githubtest\pairProject\pairproject\FlappyBird\bin\Debug\FlappyBird-signed\Application\textures\a8.png
+C:\Users\paul\Desktop\githubtest\pairProject\pairproject\FlappyBird\bin\Debug\FlappyBird-signed\Application\textures\a9.png
+C:\Users\paul\Desktop\githubtest\pairProject\pairproject\FlappyBird\bin\Debug\FlappyBird-signed\Application\textures\a10.png

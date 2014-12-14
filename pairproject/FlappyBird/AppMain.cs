@@ -357,6 +357,7 @@ namespace FlappyBird
 				{
 					player.Alive = true;
 					respawnLabel.Visible = false;
+					player.Sprite.Visible = true; 
 				}
 										
 				if (Input2.GamePad0.R.Down)
