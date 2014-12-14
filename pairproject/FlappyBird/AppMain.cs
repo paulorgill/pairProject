@@ -18,7 +18,7 @@ namespace FlappyBird
 	{
 		private static Sce.PlayStation.HighLevel.GameEngine2D.Scene 	gameScene;
 		private static Sce.PlayStation.HighLevel.UI.Scene 				uiScene;
-		private static Sce.PlayStation.HighLevel.UI.Label				hudLabel, timerLabel, gunLabel, reloadLabel, enemiesLabel;
+		private static Sce.PlayStation.HighLevel.UI.Label				hudLabel, timerLabel, gunLabel, reloadLabel, enemiesLabel, gameOverLabel;
 		
 		private static bool 		reloading = false, quitGame = false, nextLevelVoice = false, ismenu = true, isgame = false, inGameOver = false, newLevel = true;
 		private static List<Enemy>  enemies;
@@ -33,6 +33,7 @@ namespace FlappyBird
 		private static Vector2 		playerRotation = new Vector2((0.0f),(0.0f)), playerMovement = new Vector2((0.0f),(0.0f)); 
 		private static int			score = 0, lives = 3, level = 1, bulletsLeft = 20, enemiesRemaining = 0;
 		private static Timer		seconds;
+		
 	
 		public static void Main (string[] args)
 		{
@@ -49,6 +50,7 @@ namespace FlappyBird
 				
 				Director.Instance.GL.Context.SwapBuffers();
 				Director.Instance.PostSwap();
+				
 			}
 			
 			//Clean up after ourselves.
@@ -122,6 +124,16 @@ namespace FlappyBird
 			reloadLabel.Visible = false;
 			panel.AddChildLast(reloadLabel);
 			
+			//Setup the gameover label 
+			gameOverLabel = new Sce.PlayStation.HighLevel.UI.Label();
+			gameOverLabel.HorizontalAlignment = HorizontalAlignment.Center;
+			gameOverLabel.VerticalAlignment = VerticalAlignment.Middle;
+			gameOverLabel.Width = panel.Width;
+			gameOverLabel.SetPosition(Director.Instance.GL.Context.GetViewport().Width/35, Director.Instance.GL.Context.GetViewport().Height/2.5f);
+			gameOverLabel.Text = "GAME OVER";
+			gameOverLabel.Visible = false;
+			panel.AddChildLast(gameOverLabel);
+			
 			//Setup the enemies left label
 			enemiesLabel = new Sce.PlayStation.HighLevel.UI.Label();
 			enemiesLabel.HorizontalAlignment = HorizontalAlignment.Left;
@@ -172,12 +184,21 @@ namespace FlappyBird
 			// Create the gameover screen
 			//if (inGameOver == true )
 			//{
-				gameOverScreen = new GameOver(player.Sprite.Position.X, player.Sprite.Position.Y,gameScene);
+				//gameOverScreen = new GameOver(player.Sprite.Position.X, player.Sprite.Position.Y,gameScene);
+				//gameOverScreen = new GameOver(Director.Instance.GL.Context.GetViewport().Width/35, Director.Instance.GL.Context.GetViewport().Height/2.5f, gameScene);
+
 			//}
-				
+			
+			
 			//Run the scene.
 			bgmusicPlayer.Play();
 			Director.Instance.RunWithScene(gameScene, true);
+		}
+		
+		public static void Show()
+		{
+			//gameOverLabel.Text = "GAME OVER       Score: " + score +    "  Time Survived: " + (int)seconds.Seconds() + " secs";
+			//Director.Instance.Pause();
 		}
 		
 		public static void Update()
@@ -245,25 +266,45 @@ namespace FlappyBird
 				gunLabel.Visible = true;
 							
 				// hides the game over screen while the game is running
-				if (isgame == true)
+				//if (isgame == true)
 				{
-					gameOverScreen.Hide();
-				}
+					//gameOverScreen.Hide();
+				//}
 				
 				// creates the game over screen
 				if (lives ==0 )
 				{
+						
 					inGameOver = true;
+					
 					if (inGameOver == true)
 					{
 						//ismenu = false ;
 						//isgame = false;
+						//gameOverScreen = new GameOver(player.Sprite.Position.X, player.Sprite.Position.Y,gameScene);
+						
 						timerLabel.Visible = false;
 						hudLabel.Visible = false; 
 						gunLabel.Visible = false;
 						enemiesLabel.Visible = false;
-						gameOverScreen.Update(0.0f, 0.0f, 0.0f);
-						for (int i = enemies.Count - 1; i >= 0; i--)
+						gameOverLabel.Visible = true;
+						
+						 int finalScore = (int)seconds.Seconds();
+						
+						string  moo = finalScore.ToString();
+						
+						//gameOverLabel.Text = "GAME OVER       Score: " + score +    "  Time Survived: " + moo + " secs";  
+						gameOverLabel.Text = "GAME OVER       Score: " + score  ;
+
+							
+						}	
+						
+
+						
+							
+							
+						
+							for (int i = enemies.Count - 1; i >= 0; i--)
 						{
 							enemies[i].Alive = false;
 							enemies[i].Update(player, gameScene);

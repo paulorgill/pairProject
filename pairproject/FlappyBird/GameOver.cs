@@ -30,7 +30,7 @@ namespace FlappyBird
 			gameoversprite	 		= new SpriteUV();
 			gameoversprite 			= new SpriteUV(textureInfo);	
 			gameoversprite.Quad.S 	= textureInfo.TextureSizef;
-			gameoversprite.Position = new Vector2(startX, startY);
+			gameoversprite.Position = new Vector2(Director.Instance.GL.Context.GetViewport().Width, Director.Instance.GL.Context.GetViewport().Height/1.05f);
 			//sprite.Pivot 	= new Vector2(0.5f,0.5f);
 			
 			
@@ -43,12 +43,13 @@ namespace FlappyBird
 			textureInfo.Dispose();
 		}
 		
-		public void Update(float startX, float startY,float deltaTime)
+		public void Update(float startx, float starty, float deltaTime)
 		{			
 			
 			
-			gameoversprite.Visible = true;
-			gameoversprite.Position = new Vector2(startX, startY);
+			//gameoversprite.Visible = true;
+			gameoversprite.Position = new Vector2(startx, starty);
+
 		}	
 		
 		public void Hide()
