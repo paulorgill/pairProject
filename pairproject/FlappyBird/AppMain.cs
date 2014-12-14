@@ -208,6 +208,9 @@ namespace FlappyBird
 			level = 1;
 			bulletsLeft = 20;
 			enemiesRemaining = 0;
+			timeStamp = 0;
+			timeStamp2 = 0;
+			timeStamp3 = 0;
 			gameOverLabel.Visible =true;
 			background.NextMap(level);
 			gameOverLabel.Text = "GAME OVER       Score: " + finalScore.ToString() + "";
@@ -324,7 +327,7 @@ namespace FlappyBird
 					timeStamp3 = (float)seconds.Seconds() + 2f;
 				}
 													
-				if ((seconds.Seconds() >= timeStamp3) && nextLevelVoice) //All enemies are dead
+				if ((seconds.Seconds() >= timeStamp3) && nextLevelVoice) 
 				{
 					level++; //Next level
 					reloadLabel.Visible = false;
@@ -486,7 +489,8 @@ namespace FlappyBird
 						{
 							if (enemies[i].HasCollidedWithPlayer (player.Sprite) == true) //Colision between player and enemies
 							{
-								lives = lives - 1;
+								if (lives>0)
+									lives = lives - 1;
 								player.Alive = false; 
 								respawnLabel.Visible = true;
 							}

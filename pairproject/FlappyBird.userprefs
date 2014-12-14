@@ -1,10 +1,10 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="FlappyBird\AppMain.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="FlappyBird\Player.cs">
     <Files>
-      <File FileName="FlappyBird\AppMain.cs" Line="20" Column="65" />
+      <File FileName="FlappyBird\AppMain.cs" Line="493" Column="10" />
       <File FileName="FlappyBird\Bullet.cs" Line="51" Column="40" />
-      <File FileName="FlappyBird\Player.cs" Line="212" Column="10" />
+      <File FileName="FlappyBird\Player.cs" Line="192" Column="17" />
       <File FileName="FlappyBird\GameOver.cs" Line="49" Column="4" />
       <File FileName="FlappyBird\Enemy.cs" Line="76" Column="7" />
       <File FileName="FlappyBird\Menu.cs" Line="49" Column="28" />
