@@ -26,7 +26,6 @@ namespace FlappyBird
 		private static Player		player;
 		private static Background	background;
 		private static Menu         menu;
-		private static GameOver     gameOverScreen;
 		private static Sound		soundBullet, bgmusic, clickSound, nextLevelSound;
 		private static SoundPlayer 	bulletPlayer, bgmusicPlayer, clickPlayer, nextLevelPlayer;
 		private static float 		analogX, analogY, timeStamp, timeStamp2, timeStamp3, timeBetweenShots = 0.2f, reloadTime = 3.0f;
@@ -212,6 +211,7 @@ namespace FlappyBird
 			gameOverLabel.Visible =true;
 			background.NextMap(level);
 			gameOverLabel.Text = "GAME OVER       Score: " + finalScore.ToString() + "";
+			bgmusicPlayer.Play();
 			menu.Update(true);
 		}
 				
@@ -258,7 +258,7 @@ namespace FlappyBird
 							{
 								float tempX = r.Next(1,2000); //Random coords between 1 and 1500
 								float tempY = r.Next(1,2000);
-								float tempSpeed = r.Next(5,15); //Vary the speed (divide by 10 in the enemy method)
+								float tempSpeed = r.Next(5,20); //Vary the speed (divide by 10 in the enemy method)
 								Vector2 spawnPoint = new Vector2(tempX,tempY);
 								if((Vector2.Distance(player.GetPos(), spawnPoint) > 250) && (Vector2.Distance(player.GetPos(), spawnPoint) < 1000)) // Can't spawn on the player or too far
 								{

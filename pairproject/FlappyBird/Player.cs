@@ -197,19 +197,19 @@ namespace FlappyBird
 					float tempY = (30.0f);
 					spawnPoint = new Vector2(tempX,tempY);
 				}
-				if (temp == 2)
+				else if (temp == 2)
 				{
 					float tempX = (1970.0f); 
 					float tempY = (30.0f);
 					spawnPoint = new Vector2(tempX,tempY);
 				}
-				if (temp == 3)
+				else if (temp == 3)
 				{
 					float tempX = (30.0f); 
 					float tempY = (1970.0f);
 					spawnPoint = new Vector2(tempX,tempY);
 				}
-				if (temp == 4)
+				else if (temp == 4)
 				{
 					float tempX = (1970.0f); 
 					float tempY = (1970.0f);

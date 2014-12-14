@@ -48,6 +48,16 @@ namespace FlappyBird
 		public void Dispose()
 		{
 			textureInfo.Dispose();
+			textureInfo2.Dispose();
+			textureInfo3.Dispose();
+			textureInfo4.Dispose();
+			textureInfo5.Dispose();
+			textureInfo6.Dispose();
+			textureInfo7.Dispose();
+			textureInfo8.Dispose();
+			textureInfo9.Dispose();
+			textureInfo10.Dispose();
+			
 		}
 		
 		public void NextMap(int level)
