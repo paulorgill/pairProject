@@ -27,8 +27,8 @@ namespace FlappyBird
 		private static Background	background;
 		private static Menu         menu;
 		private static GameOver     gameOverScreen;
-		private static Sound		soundBullet, death, bgmusic, clickSound, nextLevelSound;
-		private static SoundPlayer 	bulletPlayer, deathPlayer, bgmusicPlayer, clickPlayer, nextLevelPlayer;
+		private static Sound		soundBullet, bgmusic, clickSound, nextLevelSound;
+		private static SoundPlayer 	bulletPlayer, bgmusicPlayer, clickPlayer, nextLevelPlayer;
 		private static float 		analogX, analogY, timeStamp, timeStamp2, timeStamp3, timeBetweenShots = 0.2f, reloadTime = 3.0f;
 		private static Vector2 		playerRotation = new Vector2((0.0f),(0.0f)), playerMovement = new Vector2((0.0f),(0.0f)); 
 		private static int			score = 0, lives = 3, level = 1, bulletsLeft = 20, enemiesRemaining = 0;
@@ -50,7 +50,6 @@ namespace FlappyBird
 				
 				Director.Instance.GL.Context.SwapBuffers();
 				Director.Instance.PostSwap();
-				
 			}
 			
 			//Clean up after ourselves.
@@ -129,7 +128,7 @@ namespace FlappyBird
 			gameOverLabel.HorizontalAlignment = HorizontalAlignment.Center;
 			gameOverLabel.VerticalAlignment = VerticalAlignment.Middle;
 			gameOverLabel.Width = panel.Width;
-			gameOverLabel.SetPosition(Director.Instance.GL.Context.GetViewport().Width/35, Director.Instance.GL.Context.GetViewport().Height/2.5f);
+			gameOverLabel.SetPosition(Director.Instance.GL.Context.GetViewport().Width/5, Director.Instance.GL.Context.GetViewport().Height/2.5f);
 			gameOverLabel.Text = "GAME OVER";
 			gameOverLabel.Visible = false;
 			panel.AddChildLast(gameOverLabel);
@@ -190,27 +189,32 @@ namespace FlappyBird
 			{
 				menu = new Menu(gameScene);
 			}
-			
-			// Create the gameover screen
-			//if (inGameOver == true )
-			//{
-				//gameOverScreen = new GameOver(player.Sprite.Position.X, player.Sprite.Position.Y,gameScene);
-				//gameOverScreen = new GameOver(Director.Instance.GL.Context.GetViewport().Width/35, Director.Instance.GL.Context.GetViewport().Height/2.5f, gameScene);
-
-			//}
-			
-			
+						
 			//Run the scene.
-			bgmusicPlayer.Play();
+			bgmusicPlayer.Play(); //Start the BGM
 			Director.Instance.RunWithScene(gameScene, true);
 		}
-		
-		public static void Show()
+				
+		public static void ResetGame(int finalScore) //Resets the game
 		{
-			//gameOverLabel.Text = "GAME OVER       Score: " + score +    "  Time Survived: " + (int)seconds.Seconds() + " secs";
-			//Director.Instance.Pause();
+			reloading = false;
+			quitGame = false;
+			nextLevelVoice = false;
+			ismenu = true;
+			isgame = false;
+			inGameOver = false;
+			newLevel = true;
+			score = 0;
+			lives = 3;
+			level = 1;
+			bulletsLeft = 20;
+			enemiesRemaining = 0;
+			gameOverLabel.Visible =true;
+			background.NextMap(level);
+			gameOverLabel.Text = "GAME OVER       Score: " + finalScore.ToString() + "";
+			menu.Update(true);
 		}
-		
+				
 		public static void Update()
 		{
 			//Determine whether the player tapped the screen
@@ -224,24 +228,23 @@ namespace FlappyBird
 				{
 					ismenu = false ;
 					isgame = true;	
-
 					inGameOver = false;
-
+					
 					seconds.Reset();	
-					clickPlayer.Play();
 				}
 			}
 			
 			// Removes the menu from the screen
 			if (isgame == true)
 			{
-				menu.Update(0.0f);
+				menu.Update(false);
 					
-				//Makes the UI visiable to the player
+				//Makes the UI visible to the player
 				timerLabel.Visible = true;
 				hudLabel.Visible = true; 
 				gunLabel.Visible = true;
 				enemiesLabel.Visible = true;
+				gameOverLabel.Visible = false;
 				
 				if (newLevel) // if new level is true
 				{
@@ -253,8 +256,8 @@ namespace FlappyBird
 							bool spawn = false; //If random coords are near the player pick another set
 							while(spawn == false)
 							{
-								float tempX = r.Next(1,3000); //Random coords between 1 and 1500
-								float tempY = r.Next(1,3000);
+								float tempX = r.Next(1,2000); //Random coords between 1 and 1500
+								float tempY = r.Next(1,2000);
 								float tempSpeed = r.Next(5,15); //Vary the speed (divide by 10 in the enemy method)
 								Vector2 spawnPoint = new Vector2(tempX,tempY);
 								if((Vector2.Distance(player.GetPos(), spawnPoint) > 250) && (Vector2.Distance(player.GetPos(), spawnPoint) < 1000)) // Can't spawn on the player or too far
@@ -274,17 +277,10 @@ namespace FlappyBird
 				timerLabel.Visible = true;
 				hudLabel.Visible = true; 
 				gunLabel.Visible = true;
-							
-				// hides the game over screen while the game is running
-				//if (isgame == true)
-				{
-					//gameOverScreen.Hide();
-				//}
-				
+								
 				// creates the game over screen
 				if (lives ==0 )
 				{
-						
 					inGameOver = true;
 					
 					if (inGameOver == true)
@@ -298,33 +294,28 @@ namespace FlappyBird
 						gunLabel.Visible = false;
 						enemiesLabel.Visible = false;
 						respawnLabel.Visible = false;
-						gameOverLabel.Visible =true;
 						
-						 int finalScore = (int)seconds.Seconds();
-						
-						string  moo = finalScore.ToString();
-						
-						//gameOverLabel.Text = "GAME OVER       Score: " + score +    "  Time Survived: " + moo + " secs";  
-						gameOverLabel.Text = "GAME OVER       Score: " + score  ;
-
-						}	
-					
-							for (int i = enemies.Count - 1; i >= 0; i--)
+						for (int i = enemies.Count - 1; i >= 0; i--)
 						{
 							enemies[i].Alive = false;
 							enemies[i].Update(player, gameScene);
 							enemies.RemoveAt(i);
 						}
-					}
+						
+						player.Alive = true;
+						player.SetPlayer(50.0f, 50.0f);
+						ResetGame(score);		
+						isgame=false;
+					}	
+				}
 					//ismenu = false ;
 					//isgame = true;
 					//quitGame = true; 
-				}
-				
+								
 				if (enemiesRemaining == level*5)
 					newLevel = false; //Stop spawning enemies
 				
-				if (enemiesRemaining == 0 && (!nextLevelVoice)) //All enemies are dead
+				if (enemiesRemaining == 0 && (!nextLevelVoice) && (lives != 0) && (!newLevel)) //All enemies are dead
 				{
 					nextLevelVoice = true;
 					nextLevelPlayer.Play();
@@ -359,7 +350,7 @@ namespace FlappyBird
 				if (Input2.GamePad0.Down.Down)
 					analogY = 1.0f;
 							
-				if (Input2.GamePad0.Triangle.Down && inGameOver == false) //Respawnbutton
+				if (Input2.GamePad0.Triangle.Down && inGameOver == false && player.Alive == false) //Respawnbutton
 				{
 					player.Alive = true;
 					respawnLabel.Visible = false;
@@ -391,11 +382,10 @@ namespace FlappyBird
 				
 				if (Input2.GamePad0.Cross.Down) //Reload button
 				{
-						//reloadLabel.Text = "Reloading...";
-						reloadLabel.Visible = true;
-						reloading = true;
+					reloadLabel.Visible = true;
+					reloading = true;
 					reloadLabel.Text = "Reloading...";
-						timeStamp = (float)seconds.Seconds() + reloadTime; //Set the time for when reload is done
+					timeStamp = (float)seconds.Seconds() + reloadTime; //Set the time for when reload is done
 				}
 				
 				if (reloading)
@@ -405,6 +395,7 @@ namespace FlappyBird
 						reloadLabel.Text = "Press X to reload!";
 						reloadLabel.Visible = false;
 						reloading = false;
+						clickPlayer.Play();
 						bulletsLeft = 20; //Reload magazine
 					}
 				}
@@ -451,28 +442,28 @@ namespace FlappyBird
 					//leave the edge of the camera on the edge of the map but let the player walk to the actual map edge.
 					//If the player isn't within screenwidth/2 or screen height/2 of a edge of the map then center on the
 					//player.
-					if ((player.GetX() < Director.Instance.GL.Context.GetViewport().Width*0.5f) || (player.GetX() > 3000f - Director.Instance.GL.Context.GetViewport().Width*0.5f) ||
-					    (player.GetY() < Director.Instance.GL.Context.GetViewport().Height*0.5f) || (player.GetY() > 3000f - Director.Instance.GL.Context.GetViewport().Height*0.5f))
+					if ((player.GetX() < Director.Instance.GL.Context.GetViewport().Width*0.5f) || (player.GetX() > 2000f - Director.Instance.GL.Context.GetViewport().Width*0.5f) ||
+					    (player.GetY() < Director.Instance.GL.Context.GetViewport().Height*0.5f) || (player.GetY() > 2000f - Director.Instance.GL.Context.GetViewport().Height*0.5f))
 					{
 						if (player.GetX() < Director.Instance.GL.Context.GetViewport().Width*0.5f) //Near left side
 							gameScene.Camera2D.SetViewY(new Vector2(0.0f,Director.Instance.GL.Context.GetViewport().Height*0.5f), new Vector2(Director.Instance.GL.Context.GetViewport().Width*0.5f, player.GetY()));
-						if (player.GetX() > 3000f - Director.Instance.GL.Context.GetViewport().Width*0.5f) //Near right side
-							gameScene.Camera2D.SetViewY(new Vector2(0.0f,Director.Instance.GL.Context.GetViewport().Height*0.5f), new Vector2(3000f - Director.Instance.GL.Context.GetViewport().Width*0.5f, player.GetY()));
+						if (player.GetX() > 2000f - Director.Instance.GL.Context.GetViewport().Width*0.5f) //Near right side
+							gameScene.Camera2D.SetViewY(new Vector2(0.0f,Director.Instance.GL.Context.GetViewport().Height*0.5f), new Vector2(2000f - Director.Instance.GL.Context.GetViewport().Width*0.5f, player.GetY()));
 						if (player.GetY() < Director.Instance.GL.Context.GetViewport().Height*0.5f) //Near bottom side
 							gameScene.Camera2D.SetViewY(new Vector2(0.0f,Director.Instance.GL.Context.GetViewport().Height*0.5f), new Vector2(player.GetX(), Director.Instance.GL.Context.GetViewport().Height*0.5f));
-						if (player.GetY() > 3000.0f - Director.Instance.GL.Context.GetViewport().Height*0.5f) //Near top side
+						if (player.GetY() > 2000.0f - Director.Instance.GL.Context.GetViewport().Height*0.5f) //Near top side
 							gameScene.Camera2D.SetViewY(new Vector2(0.0f,Director.Instance.GL.Context.GetViewport().Height*0.5f), 
-							                            new Vector2(player.GetX(), 3000.0f - Director.Instance.GL.Context.GetViewport().Height*0.5f));
+							                            new Vector2(player.GetX(), 2000.0f - Director.Instance.GL.Context.GetViewport().Height*0.5f));
 						if ((player.GetX() < Director.Instance.GL.Context.GetViewport().Width*0.5f) && (player.GetY() < Director.Instance.GL.Context.GetViewport().Height*0.5f)) //Near bottom left corner
 							gameScene.Camera2D.SetViewY(new Vector2(0.0f,Director.Instance.GL.Context.GetViewport().Height*0.5f),
 							                            new Vector2(Director.Instance.GL.Context.GetViewport().Width*0.5f, Director.Instance.GL.Context.GetViewport().Height*0.5f));
-						if ((player.GetX() < Director.Instance.GL.Context.GetViewport().Width*0.5f) && (player.GetY() > 3000.0f - Director.Instance.GL.Context.GetViewport().Height*0.5f)) //Near top left corner
+						if ((player.GetX() < Director.Instance.GL.Context.GetViewport().Width*0.5f) && (player.GetY() > 2000.0f - Director.Instance.GL.Context.GetViewport().Height*0.5f)) //Near top left corner
 							gameScene.Camera2D.SetViewY(new Vector2(0.0f,Director.Instance.GL.Context.GetViewport().Height*0.5f),
-							                            new Vector2(Director.Instance.GL.Context.GetViewport().Width*0.5f, 3000.0f - Director.Instance.GL.Context.GetViewport().Height*0.5f));
-						if ((player.GetX() > 3000.0f - Director.Instance.GL.Context.GetViewport().Width*0.5f) && (player.GetY() > 3000.0f - Director.Instance.GL.Context.GetViewport().Height*0.5f)) //Near top right corner
+							                            new Vector2(Director.Instance.GL.Context.GetViewport().Width*0.5f, 2000.0f - Director.Instance.GL.Context.GetViewport().Height*0.5f));
+						if ((player.GetX() > 2000.0f - Director.Instance.GL.Context.GetViewport().Width*0.5f) && (player.GetY() > 2000.0f - Director.Instance.GL.Context.GetViewport().Height*0.5f)) //Near top right corner
 							gameScene.Camera2D.SetViewY(new Vector2(0.0f,Director.Instance.GL.Context.GetViewport().Height*0.5f),
-							                            new Vector2(3000.0f - Director.Instance.GL.Context.GetViewport().Width*0.5f, 3000.0f - Director.Instance.GL.Context.GetViewport().Height*0.5f));
-						if ((player.GetX() > 3000.0f -  Director.Instance.GL.Context.GetViewport().Width*0.5f) && (player.GetY() < Director.Instance.GL.Context.GetViewport().Height*0.5f)) //Near bottom right corner
+							                            new Vector2(2000.0f - Director.Instance.GL.Context.GetViewport().Width*0.5f, 2000.0f - Director.Instance.GL.Context.GetViewport().Height*0.5f));
+						if ((player.GetX() > 2000.0f -  Director.Instance.GL.Context.GetViewport().Width*0.5f) && (player.GetY() < Director.Instance.GL.Context.GetViewport().Height*0.5f)) //Near bottom right corner
 							gameScene.Camera2D.SetViewY(new Vector2(0.0f,Director.Instance.GL.Context.GetViewport().Height*0.5f),
 							                            new Vector2(Director.Instance.GL.Context.GetViewport().Width*0.5f, Director.Instance.GL.Context.GetViewport().Height*0.5f));
 					}
@@ -482,12 +473,12 @@ namespace FlappyBird
 					//Create map boundaries
 					if (player.GetX() < 0.0f) //Left side boundary
 						player.SetPlayer(0.0f, player.GetY());
-					if (player.GetX() > 3000.0f) //Right side boundary
-						player.SetPlayer(3000.0f, player.GetY());
+					if (player.GetX() > 2000.0f) //Right side boundary
+						player.SetPlayer(2000.0f, player.GetY());
 					if (player.GetY() < 0.0f) //Bottom side boundary
 						player.SetPlayer(player.GetX(), 0.0f);
-					if (player.GetY() > 3000.0f) //Top side boundary
-						player.SetPlayer(player.GetX(), 3000.0f);
+					if (player.GetY() > 2000.0f) //Top side boundary
+						player.SetPlayer(player.GetX(), 2000.0f);
 						
 					for (int i = enemies.Count - 1; i >= 0; i--) //Check all enemies for collisions with player or bullet
 					{

@@ -189,14 +189,34 @@ namespace FlappyBird
 			if (Alive == false )
 			{
 				Random r = new Random();
-				
-				
-				float tempX = r.Next(1,1000); //Random coords between 1 and 1500
-				float tempY = r.Next(1,1000);
+				float temp = r.Next(0,5);	
+				Vector2 spawnPoint = new Vector2(0.0f,0.0f);
+				if (temp == 1)
+				{
+					float tempX = (30.0f); 
+					float tempY = (30.0f);
+					spawnPoint = new Vector2(tempX,tempY);
+				}
+				if (temp == 2)
+				{
+					float tempX = (1970.0f); 
+					float tempY = (30.0f);
+					spawnPoint = new Vector2(tempX,tempY);
+				}
+				if (temp == 3)
+				{
+					float tempX = (30.0f); 
+					float tempY = (1970.0f);
+					spawnPoint = new Vector2(tempX,tempY);
+				}
+				if (temp == 4)
+				{
+					float tempX = (1970.0f); 
+					float tempY = (1970.0f);
+					spawnPoint = new Vector2(tempX,tempY);
+				}
 								
-				Vector2 spawnPoint = new Vector2(tempX,tempY);
-				
-								sprite.Position = new Vector2(spawnPoint.X, spawnPoint.Y);
+				sprite.Position = new Vector2(spawnPoint.X, spawnPoint.Y);
 
 				//sprite.Position = new Vector2(100.0f, 100.0f);
 				//scene.RemoveChild(sprite,false );

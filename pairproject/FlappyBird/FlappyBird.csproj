@@ -85,5 +85,10 @@
     <Content Include="textures\a3.png" />
     <Content Include="textures\a4.png" />
     <Content Include="textures\a5.png" />
+    <Content Include="textures\a6.png" />
+    <Content Include="textures\a7.png" />
+    <Content Include="textures\a8.png" />
+    <Content Include="textures\a9.png" />
+    <Content Include="textures\a10.png" />
   </ItemGroup>
 </Project>

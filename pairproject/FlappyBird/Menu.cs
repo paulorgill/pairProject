@@ -42,11 +42,11 @@ namespace FlappyBird
 			textureInfo.Dispose();
 		}
 		
-		public void Update(float deltaTime)
+		public void Update(bool visible)
 		{			
 			
 			
-			sprite.Visible = false;
+			sprite.Visible = visible;
 			
 		}	
 		

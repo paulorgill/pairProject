@@ -12,22 +12,27 @@ namespace FlappyBird
 	{	
 		//Private variables.
 		private SpriteUV[,] 	sprites;
-		private TextureInfo	textureInfo, textureInfo2, textureInfo3, textureInfo4, textureInfo5;
+		private TextureInfo	textureInfo, textureInfo2, textureInfo3, textureInfo4, textureInfo5, textureInfo6, textureInfo7, textureInfo8, textureInfo9, textureInfo10;
 		
 		//Public functions.
 		public Background (Scene scene)
 		{
-			sprites	= new SpriteUV[3,3];
+			sprites	= new SpriteUV[2,2];
 			
 			textureInfo  		= new TextureInfo("/Application/textures/a1.png");
 			textureInfo2  		= new TextureInfo("/Application/textures/a2.png");
 			textureInfo3  		= new TextureInfo("/Application/textures/a3.png");
 			textureInfo4  		= new TextureInfo("/Application/textures/a4.png");
 			textureInfo5  		= new TextureInfo("/Application/textures/a5.png");
+			textureInfo6  		= new TextureInfo("/Application/textures/a6.png");
+			textureInfo7  		= new TextureInfo("/Application/textures/a7.png");
+			textureInfo8  		= new TextureInfo("/Application/textures/a8.png");
+			textureInfo9  		= new TextureInfo("/Application/textures/a9.png");
+			textureInfo10  		= new TextureInfo("/Application/textures/a10.png");
 			
-			for (int i = 0; i < 3; ++i)
+			for (int i = 0; i < 2; ++i)
 			{
-    			for (int j = 0; j < 3; ++j)
+    			for (int j = 0; j < 2; ++j)
 				{
 					sprites[i,j] 			= new SpriteUV(textureInfo);
 					sprites[i,j].Quad.S 		= textureInfo.TextureSizef;
@@ -47,11 +52,21 @@ namespace FlappyBird
 		
 		public void NextMap(int level)
 		{
-			if (level == 2)
+			if (level == 1)
 			{
-				for (int i = 0; i < 3; ++i)
+				for (int i = 0; i < 2; ++i)
 				{
-	    			for (int j = 0; j < 3; ++j)
+	    			for (int j = 0; j < 2; ++j)
+					{
+						sprites[i,j].TextureInfo = textureInfo;
+					}
+				}
+			}
+			else if (level == 2)
+			{
+				for (int i = 0; i < 2; ++i)
+				{
+	    			for (int j = 0; j < 2; ++j)
 					{
 						sprites[i,j].TextureInfo = textureInfo2;
 					}
@@ -59,9 +74,9 @@ namespace FlappyBird
 			}
 			else if (level == 3)
 			{
-				for (int i = 0; i < 3; ++i)
+				for (int i = 0; i < 2; ++i)
 				{
-	    			for (int j = 0; j < 3; ++j)
+	    			for (int j = 0; j < 2; ++j)
 					{
 						sprites[i,j].TextureInfo = textureInfo3;
 					}
@@ -69,9 +84,9 @@ namespace FlappyBird
 			}
 			else if (level == 4)
 			{
-				for (int i = 0; i < 3; ++i)
+				for (int i = 0; i < 2; ++i)
 				{
-	    			for (int j = 0; j < 3; ++j)
+	    			for (int j = 0; j < 2; ++j)
 					{
 						sprites[i,j].TextureInfo = textureInfo4;
 					}
@@ -79,11 +94,61 @@ namespace FlappyBird
 			}
 			else if (level == 5)
 			{
-				for (int i = 0; i < 3; ++i)
+				for (int i = 0; i < 2; ++i)
 				{
-	    			for (int j = 0; j < 3; ++j)
+	    			for (int j = 0; j < 2; ++j)
 					{
 						sprites[i,j].TextureInfo = textureInfo5;
+					}
+				}
+			}
+			else if (level == 6)
+			{
+				for (int i = 0; i < 2; ++i)
+				{
+	    			for (int j = 0; j < 2; ++j)
+					{
+						sprites[i,j].TextureInfo = textureInfo6;
+					}
+				}
+			}
+			else if (level == 7)
+			{
+				for (int i = 0; i < 2; ++i)
+				{
+	    			for (int j = 0; j < 2; ++j)
+					{
+						sprites[i,j].TextureInfo = textureInfo7;
+					}
+				}
+			}
+			else if (level == 8)
+			{
+				for (int i = 0; i < 2; ++i)
+				{
+	    			for (int j = 0; j < 2; ++j)
+					{
+						sprites[i,j].TextureInfo = textureInfo8;
+					}
+				}
+			}
+			else if (level == 9)
+			{
+				for (int i = 0; i < 2; ++i)
+				{
+	    			for (int j = 0; j < 2; ++j)
+					{
+						sprites[i,j].TextureInfo = textureInfo9;
+					}
+				}
+			}
+			else if (level == 10)
+			{
+				for (int i = 0; i < 2; ++i)
+				{
+	    			for (int j = 0; j < 2; ++j)
+					{
+						sprites[i,j].TextureInfo = textureInfo10;
 					}
 				}
 			}
