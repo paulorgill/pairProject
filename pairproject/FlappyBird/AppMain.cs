@@ -18,7 +18,7 @@ namespace FlappyBird
 	{
 		private static Sce.PlayStation.HighLevel.GameEngine2D.Scene 	gameScene;
 		private static Sce.PlayStation.HighLevel.UI.Scene 				uiScene;
-		private static Sce.PlayStation.HighLevel.UI.Label				hudLabel, timerLabel, gunLabel, reloadLabel, enemiesLabel, gameOverLabel;
+		private static Sce.PlayStation.HighLevel.UI.Label				hudLabel, timerLabel, gunLabel, reloadLabel, enemiesLabel, gameOverLabel, respawnLabel;
 		
 		private static bool 		reloading = false, quitGame = false, nextLevelVoice = false, ismenu = true, isgame = false, inGameOver = false, newLevel = true;
 		private static List<Enemy>  enemies;
@@ -133,6 +133,16 @@ namespace FlappyBird
 			gameOverLabel.Text = "GAME OVER";
 			gameOverLabel.Visible = false;
 			panel.AddChildLast(gameOverLabel);
+			
+			//Setup the press to respawn label 
+			respawnLabel = new Sce.PlayStation.HighLevel.UI.Label();
+			respawnLabel.HorizontalAlignment = HorizontalAlignment.Center;
+			respawnLabel.VerticalAlignment = VerticalAlignment.Middle;
+			respawnLabel.Width = panel.Width;
+			respawnLabel.SetPosition(Director.Instance.GL.Context.GetViewport().Width/35, Director.Instance.GL.Context.GetViewport().Height/5.5f);
+			respawnLabel.Text = "Press triangle to respawn";
+			respawnLabel.Visible = false;
+			panel.AddChildLast(respawnLabel);
 			
 			//Setup the enemies left label
 			enemiesLabel = new Sce.PlayStation.HighLevel.UI.Label();
@@ -287,7 +297,8 @@ namespace FlappyBird
 						hudLabel.Visible = false; 
 						gunLabel.Visible = false;
 						enemiesLabel.Visible = false;
-						gameOverLabel.Visible = true;
+						respawnLabel.Visible = false;
+						gameOverLabel.Visible =true;
 						
 						 int finalScore = (int)seconds.Seconds();
 						
@@ -296,14 +307,8 @@ namespace FlappyBird
 						//gameOverLabel.Text = "GAME OVER       Score: " + score +    "  Time Survived: " + moo + " secs";  
 						gameOverLabel.Text = "GAME OVER       Score: " + score  ;
 
-							
 						}	
-						
-
-						
-							
-							
-						
+					
 							for (int i = enemies.Count - 1; i >= 0; i--)
 						{
 							enemies[i].Alive = false;
@@ -354,8 +359,11 @@ namespace FlappyBird
 				if (Input2.GamePad0.Down.Down)
 					analogY = 1.0f;
 							
-				if (Input2.GamePad0.Triangle.Down) //Respawnbutton
+				if (Input2.GamePad0.Triangle.Down && inGameOver == false) //Respawnbutton
+				{
 					player.Alive = true;
+					respawnLabel.Visible = false;
+				}
 										
 				if (Input2.GamePad0.R.Down)
 				{
@@ -373,16 +381,20 @@ namespace FlappyBird
 					}
 					else
 					{
+						if (!reloading)
+						{
 						reloadLabel.Text = "Press X to reload!";
 						reloadLabel.Visible = true;
+						}
 					}
 				}
 				
 				if (Input2.GamePad0.Cross.Down) //Reload button
 				{
-						reloadLabel.Text = "Reloading...";
+						//reloadLabel.Text = "Reloading...";
 						reloadLabel.Visible = true;
 						reloading = true;
+					reloadLabel.Text = "Reloading...";
 						timeStamp = (float)seconds.Seconds() + reloadTime; //Set the time for when reload is done
 				}
 				
@@ -485,6 +497,7 @@ namespace FlappyBird
 							{
 								lives = lives - 1;
 								player.Alive = false; 
+								respawnLabel.Visible = true;
 							}
 							for (int j = bullets.Count - 1; j >= 0; j--) 
 							{
@@ -495,7 +508,7 @@ namespace FlappyBird
 									enemies[i].Update(player, gameScene);
 									enemies.RemoveAt(i); //Remove the enemy from the list
 									enemiesRemaining--;
-									bullets[j].ResetBullet(-500,-500);
+									//bullets[j].ResetBullet(-500,-500);
 								}
 								Vector2 bulletPosition = bullets[j].GetPos(); 			
 								if(bulletPosition.X == -500 && bulletPosition.Y == -500)

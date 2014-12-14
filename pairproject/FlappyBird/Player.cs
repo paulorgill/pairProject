@@ -188,8 +188,17 @@ namespace FlappyBird
 			
 			if (Alive == false )
 			{
+				Random r = new Random();
 				
-				sprite.Position = new Vector2(100.0f, 100.0f);
+				
+				float tempX = r.Next(1,1000); //Random coords between 1 and 1500
+				float tempY = r.Next(1,1000);
+								
+				Vector2 spawnPoint = new Vector2(tempX,tempY);
+				
+								sprite.Position = new Vector2(spawnPoint.X, spawnPoint.Y);
+
+				//sprite.Position = new Vector2(100.0f, 100.0f);
 				//scene.RemoveChild(sprite,false );
 				Player.alive = false; 
 				sprite.Visible = false;

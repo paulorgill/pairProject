@@ -62,32 +62,44 @@ namespace FlappyBird
 					if (player.Alive == true)
 						{
 			
-					if (player.Sprite.Position.X > enemySprite.Position.X)
-						{
-							enemySprite.Position = new Vector2(enemySprite.Position.X + enemySpeed,enemySprite.Position.Y);
-							enemySprite.TextureInfo = textureInfoRight;
-						}
-			
-					if (player.Sprite.Position.X < enemySprite.Position.X)
-						{
-							enemySprite.Position = new Vector2(enemySprite.Position.X - enemySpeed,enemySprite.Position.Y);
-							enemySprite.TextureInfo = textureInfoLeft;
-						}
+							if (player.Sprite.Position.X > enemySprite.Position.X)
+							{
+								enemySprite.Position = new Vector2(enemySprite.Position.X + enemySpeed,enemySprite.Position.Y);
+								enemySprite.TextureInfo = textureInfoRight;
+						
+							}
+					
+					
+								if(player.Sprite.Position.X < enemySprite.Position.X)
+								{
+								
+						enemySprite.Position = new Vector2(enemySprite.Position.X - enemySpeed,enemySprite.Position.Y);
+								enemySprite.TextureInfo = textureInfoLeft;
+					
+								}
+					
+					
 					
 			
-					if (player.Sprite.Position.Y > enemySprite.Position.Y)
-						{
-							enemySprite.Position = new Vector2(enemySprite.Position.X,enemySprite.Position.Y + enemySpeed);
-							enemySprite.TextureInfo = textureInfoUp;
-			
-						}
-			
+					 		 if (player.Sprite.Position.Y > enemySprite.Position.Y)
+							{
+								enemySprite.Position = new Vector2(enemySprite.Position.X,enemySprite.Position.Y + enemySpeed);
+								enemySprite.TextureInfo = textureInfoUp;
+						
+						
+							}
+					
 					if (player.Sprite.Position.Y < enemySprite.Position.Y)
-						{
-							enemySprite.Position = new Vector2(enemySprite.Position.X ,enemySprite.Position.Y - enemySpeed);
-							enemySprite.TextureInfo = textureInfoDown;
-						}
-				}
+							{
+								enemySprite.Position = new Vector2(enemySprite.Position.X ,enemySprite.Position.Y - enemySpeed);
+								enemySprite.TextureInfo = textureInfoDown;
+							}
+					
+							
+					
+							
+					
+					}
 		}
 			
 			if (Alive == false )
