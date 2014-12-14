@@ -99,8 +99,8 @@ namespace FlappyBird
 			if (Alive == false )
 			{
 				//scene.AddChild(sprite);
-				scene.RemoveChild(sprite,false );
-				Player.alive = false; 
+				//scene.RemoveChild(sprite,false );
+				//Player.alive = false; 
 			}
 			
 			//else 
